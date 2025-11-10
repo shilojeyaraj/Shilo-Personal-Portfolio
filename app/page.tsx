@@ -2,6 +2,7 @@
 
 import React from 'react'
 import PhotoCarousel from '@/components/ui/PhotoCarousel'
+import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect'
 import { motion } from 'framer-motion'
 import { 
   Github, 
@@ -53,15 +54,31 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <motion.h1 
-            className="text-5xl md:text-7xl font-bold mb-6"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-6 flex justify-center"
           >
-            Hi, I'm{' '}
-            <span className="text-gradient">Shilo </span>
-          </motion.h1>
+            <div className="text-6xl md:text-8xl font-bold">
+              <TypewriterEffectSmooth 
+                words={[
+                  {
+                    text: "Hi,",
+                    className: "text-white",
+                  },
+                  {
+                    text: "I'm",
+                    className: "text-white",
+                  },
+                  {
+                    text: "Shilo",
+                    className: "text-gradient",
+                  },
+                ]}
+              />
+            </div>
+          </motion.div>
           
           <motion.p 
             className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto"
@@ -96,7 +113,7 @@ const HeroSection = () => {
             {[
               { icon: Github, href: 'https://github.com/shilojeyaraj', label: 'GitHub' },
               { icon: Linkedin, href: 'https://linkedin.com/in/shilo-jeyaraj', label: 'LinkedIn' },
-              { icon: Mail, href: 'mailto:contact@shilojeyaraj.com', label: 'Email' }
+              { icon: Mail, href: 'mailto:stjeyara@uwaterloo.ca', label: 'Email' }
             ].map(({ icon: Icon, href, label }) => (
               <motion.a
                 key={label}
@@ -280,8 +297,13 @@ const ExperienceSection = () => {
       duration: "Sep 2025 - Present",
       type: "Full-time",
       description: "Currently developing and testing AI-powered chatbot for customer support along with other product features.",
-      
-      
+      achievements: [
+        "Improved backend efficiency by refactoring critical services, reducing system latency by 15% and supporting scalable architecture",
+        "Built and maintained automated testing pipelines with integrated security features, decreasing regression issues by 30% and strengthening system reliability",
+        "Developed real-time backend and frontend tools, streamlining internal workflows and enabling faster feature delivery",
+        "Prototyped and benchmarked Retrieval-Augmented Generation (RAG) models, enhancing product accuracy and informing future AI-driven capabilities",
+        "Authored internal documentation and workflow guides, boosting cross-team onboarding speed and knowledge retention"
+      ]
     },
         {
       title: "Software Engineer Intern",
@@ -611,7 +633,7 @@ const ContactSection = () => {
             
             <div className="space-y-6">
               {[
-                { icon: Mail, label: 'Email', value: 'shilojeyaraj@gmail.com' },
+                { icon: Mail, label: 'Email', value: 'stjeyara@uwaterloo.ca' },
                 { icon: MapPin, label: 'Location', value: 'Available for remote work and willing to relocate' },
                 { icon: Calendar, label: 'Availability', value: 'Open to new opportunities' }
               ].map(({ icon: Icon, label, value }) => (

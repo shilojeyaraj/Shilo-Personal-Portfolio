@@ -15,13 +15,13 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   title: 'Shilo Jeyaraj - Full Stack Developer',
-  description: 'Portfolio of Shilo Jeyaraj, a passionate full-stack developer specializing in modern web technologies, AI, and innovative solutions.',
+  description: 'Portfolio of Shilo Jeyaraj, a passionate Software developer specializing in modern web technologies, AI, and innovative solutions.',
   keywords: 'Shilo Jeyaraj, Full Stack Developer, React, Next.js, TypeScript, Python, AI, Machine Learning',
   authors: [{ name: 'Shilo Jeyaraj' }],
   creator: 'Shilo Jeyaraj',
   openGraph: {
     title: 'Shilo Jeyaraj - Full Stack Developer',
-    description: 'Portfolio of Shilo Jeyaraj, a passionate full-stack developer',
+    description: 'Portfolio of Shilo Jeyaraj, a passionate Software developer',
     url: 'https://shilojeyaraj.com',
     siteName: 'Shilo Jeyaraj Portfolio',
     locale: 'en_US',
@@ -29,8 +29,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shilo Jeyaraj - Full Stack Developer',
-    description: 'Portfolio of Shilo Jeyaraj, a passionate full-stack developer',
+    title: 'Shilo Jeyaraj - Software Developer',
+    description: 'Portfolio of Shilo , a passionate Software developer',
   },
 }
 

@@ -26,17 +26,33 @@ export default function PhotoCarousel({ images, className = '', rounded = 'round
     if (!el) return
     const onScroll = () => {
       const w = el.clientWidth
-      setIndex(Math.round(el.scrollLeft / w))
+      const currentIndex = Math.round(el.scrollLeft / w)
+      // Ensure index is within bounds
+      const boundedIndex = Math.max(0, Math.min(currentIndex, images.length - 1))
+      setIndex(boundedIndex)
     }
     el.addEventListener('scroll', onScroll, { passive: true })
     return () => el.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [images.length])
 
   const scrollTo = (i: number) => {
-    scrollerRef.current?.scrollTo({ left: i * (scrollerRef.current?.clientWidth || 0), behavior: 'smooth' })
+    const el = scrollerRef.current
+    if (!el) return
+    const targetIndex = ((i % images.length) + images.length) % images.length // Ensure positive modulo
+    const width = el.clientWidth
+    el.scrollTo({ left: targetIndex * width, behavior: 'smooth' })
+    setIndex(targetIndex)
   }
-  const next = () => scrollTo(Math.min(index + 1, images.length - 1))
-  const prev = () => scrollTo(Math.max(index - 1, 0))
+  
+  const next = () => {
+    const newIndex = (index + 1) % images.length
+    scrollTo(newIndex)
+  }
+  
+  const prev = () => {
+    const newIndex = (index - 1 + images.length) % images.length
+    scrollTo(newIndex)
+  }
 
   return (
     <div className={`relative ${className}`}>
