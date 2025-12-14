@@ -140,35 +140,35 @@ const HeroSection = () => {
 
 // About Section
 
-import { Layout, Server, Wrench, Cpu } from "lucide-react" // icons
+import { Layout, Server, Wrench, Cpu, Cloud, Database } from "lucide-react" // icons
 
 
 
 const AboutSection = () => {
   const skills = [
     {
-      icon: Layout,
-      title: "Frontend Development",
+      icon: Code,
+      title: "Languages & Frameworks",
       description:
-        "HTML, CSS, JavaScript, React, Next.js, Tailwind, and Node.js tooling to ship clean, responsive UIs."
+        "Python, TypeScript, JavaScript, SQL, Java, C/C++, HTML/CSS, Bash. React, Next.js, Node.js, FastAPI, Flask, TensorFlow, PyTorch, Pandas, NumPy, Tailwind CSS, Framer Motion, OpenCV, MediaPipe, OCR."
     },
     {
-      icon: Server,
-      title: "Backend Development",
+      icon: Cloud,
+      title: "Cloud Infrastructure & DevOps",
       description:
-        "Python, C++, SQL, REST APIs, Flask/Node.js, and data pipelines for scalable, secure services."
+        "Google Cloud Platform (Vertex AI, BigQuery, Cloud Run), AWS, Docker, PostgreSQL, Supabase, Git, Linux, Elasticsearch, MongoDB, WebSockets, Cloudflare."
+    },
+    {
+      icon: Brain,
+      title: "AI & Data Tools",
+      description:
+        "OpenAI API, LangChain, Google Gemini, Pgvector, Vertex AI SDKs, Claude Code, Cursor, Vector Embeddings, Fivetran, REST APIs, ROS 2."
     },
     {
       icon: Wrench,
       title: "Mechanical & Hardware Engineering",
       description:
         "AutoCAD, SolidWorks, PCB design, circuit design, and machine shop tools for hardware integration."
-    },
-    {
-      icon: Cpu,
-      title: "AI Development & Robotics",
-      description:
-        "Python, TensorFlow, OpenCV, and ROS 2 for real-time AI, computer vision, and robotic systems."
     }
   ]
 
@@ -298,11 +298,11 @@ const ExperienceSection = () => {
       type: "Full-time",
       description: "Currently developing and testing AI-powered chatbot for customer support along with other product features.",
       achievements: [
-        "Improved backend efficiency by refactoring critical services, reducing system latency by 15% and supporting scalable architecture",
-        "Built and maintained automated testing pipelines with integrated security features, decreasing regression issues by 30% and strengthening system reliability",
-        "Developed real-time backend and frontend tools, streamlining internal workflows and enabling faster feature delivery",
-        "Prototyped and benchmarked Retrieval-Augmented Generation (RAG) models, enhancing product accuracy and informing future AI-driven capabilities",
-        "Authored internal documentation and workflow guides, boosting cross-team onboarding speed and knowledge retention"
+        "Implemented complete Calendly integration and booking system with pre-filled forms, improving demo scheduling efficiency for 30+ potential clients",
+        "Enhanced financial plan generator to meet FP Canada compliance requirements, developing a 1,200+ line prompt engineering system",
+        "Built comprehensive advisor profile management system with API endpoints and settings UI, streamlining information management for financial advisors",
+        "Created developer testing infrastructure including test signup endpoint and authentication bypass, reducing development workflow time by 75%",
+        "Resolved critical UI/UX issues including CSP configurations, Stripe client initialization, and preload optimizations"
       ]
     },
         {
@@ -314,7 +314,7 @@ const ExperienceSection = () => {
       description:
         "Contributed to full-stack and AI development projects, enhancing internal tools and building AI-powered document processing systems.",
       achievements: [
-        "Built and enhanced Normative’s internal site using Retool and JavaScript, improving usability for 30+ team members",
+        "Built and enhanced Freedman's internal site using Retool and JavaScript, improving usability for 30+ team members",
         "Created an OCR-based document processing system with Python backend and HTML/CSS frontend, improving text recognition accuracy of scanned PDFs by 75%",
         "Developed and tested AI-driven business proposal generation using reinforcement learning and Python, optimizing proposal quality and reducing editing time"
       ]
