@@ -24,7 +24,11 @@ import {
    Brain, 
    Mic, 
    Bot, 
-   Gamepad2
+   Gamepad2,
+   Sparkles,
+   GraduationCap,
+   Trophy,
+   Search
 
 } from 'lucide-react'
 
@@ -426,6 +430,42 @@ const ExperienceSection = () => {
 const ProjectsSection = () => {
   const projects = [
     {
+      title: "Dermalens - AI-Powered Skincare Analysis",
+      description:
+        "AI-powered skincare analysis application built for Google Cloud AI Accelerate Hackathon. Uses Google Gemini 1.5 Pro for medical-grade skin analysis, Elasticsearch for intelligent product recommendations, and Fivetran for automated data ingestion. Features real-time data pipeline, Google Cloud integration (BigQuery, Cloud Storage, Vertex AI), and secure authentication with Supabase.",
+      technologies: ["Next.js", "TypeScript", "FastAPI", "Python", "Google Gemini 1.5 Pro", "Elasticsearch", "Fivetran", "Supabase", "Google Cloud Platform", "BigQuery", "Vertex AI", "Tailwind CSS", "Radix UI", "Docker"],
+      githubUrl: "https://github.com/shilojeyaraj/Dermalens",
+      featured: true,
+      icon: Search
+    },
+    {
+      title: "Brain Battle - Interactive Quiz Platform",
+      description:
+        "Interactive quiz and trivia platform for competitive brain training. Features real-time multiplayer capabilities, scoring system, and diverse question categories. Built with modern web technologies for responsive gameplay and engaging user experience.",
+      technologies: ["React", "Next.js", "TypeScript", "Node.js", "WebSockets", "PostgreSQL", "Tailwind CSS", "Docker"],
+      githubUrl: "https://github.com/shilojeyaraj/Brain-Battle",
+      featured: false,
+      icon: Trophy
+    },
+    {
+      title: "Shilo Chat - AI-Powered Chat Application",
+      description:
+        "AI-powered chat application with real-time messaging capabilities. Features intelligent conversation handling, message history, and seamless user experience. Built with modern full-stack technologies for scalable and responsive communication.",
+      technologies: ["Next.js", "TypeScript", "React", "Node.js", "FastAPI", "Python", "WebSockets", "PostgreSQL", "Supabase", "Tailwind CSS"],
+      githubUrl: "https://github.com/shilojeyaraj/Shilo-chat",
+      featured: false,
+      icon: Sparkles
+    },
+    {
+      title: "Elective Chooser - Course Selection Platform",
+      description:
+        "Web application designed to assist students in selecting elective courses by providing detailed information, reviews, and recommendations. Streamlines the decision-making process for course selection with intuitive interface and comprehensive course data.",
+      technologies: ["React", "Next.js", "TypeScript", "FastAPI", "Python", "PostgreSQL", "Supabase", "Tailwind CSS", "Docker"],
+      githubUrl: "https://github.com/shilojeyaraj/Elective-chooser",
+      featured: false,
+      icon: GraduationCap
+    },
+    {
       title: "Gym Posture Corrector (Real-Time Form Feedback)",
       description:
         "Real-time posture analysis using OpenCV/MediaPipe to extract skeletal keypoints and a TensorFlow classifier to distinguish good vs. bad exercise form. Flask + JS UI for instant feedback.",
@@ -529,8 +569,8 @@ const ProjectsSection = () => {
                   project.featured ? 'md:col-span-1' : ''
                 }`}
               >
-                {/* Icon header instead of image */}
-                <div className="relative h-40 flex items-center justify-center bg-primary/5">
+                {/* Project image/logo header */}
+                <div className="relative h-64 md:h-72 flex items-center justify-center bg-primary/5">
                   <div className="absolute top-4 left-4">
                     {project.featured && (
                       <div className="flex items-center bg-primary text-primary-foreground px-2 py-1 rounded-full text-xs font-medium">
