@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import PhotoCarousel from '@/components/ui/PhotoCarousel'
 import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect'
 import { motion } from 'framer-motion'
@@ -429,32 +429,26 @@ const ExperienceSection = () => {
 // Projects Section
 const ProjectsSection = () => {
   const projects = [
-    {
-      title: "Dermalens - AI-Powered Skincare Analysis",
-      description:
-        "AI-powered skincare analysis application built for Google Cloud AI Accelerate Hackathon. Uses Google Gemini 1.5 Pro for medical-grade skin analysis, Elasticsearch for intelligent product recommendations, and Fivetran for automated data ingestion. Features real-time data pipeline, Google Cloud integration (BigQuery, Cloud Storage, Vertex AI), and secure authentication with Supabase.",
-      technologies: ["Next.js", "TypeScript", "FastAPI", "Python", "Google Gemini 1.5 Pro", "Elasticsearch", "Fivetran", "Supabase", "Google Cloud Platform", "BigQuery", "Vertex AI", "Tailwind CSS", "Radix UI", "Docker"],
-      githubUrl: "https://github.com/shilojeyaraj/Dermalens",
-      featured: true,
-      icon: Search
-    },
+    // Published projects (with deployed links) - at the top
     {
       title: "Brain Battle - Interactive Quiz Platform",
       description:
         "Interactive quiz and trivia platform for competitive brain training. Features real-time multiplayer capabilities, scoring system, and diverse question categories. Built with modern web technologies for responsive gameplay and engaging user experience.",
       technologies: ["React", "Next.js", "TypeScript", "Node.js", "WebSockets", "PostgreSQL", "Tailwind CSS", "Docker"],
       githubUrl: "https://github.com/shilojeyaraj/Brain-Battle",
+      projectUrl: "", // Add deployed URL here when available
       featured: false,
       icon: Trophy
     },
     {
-      title: "Shilo Chat - AI-Powered Chat Application",
+      title: "Dermalens - AI-Powered Skincare Analysis",
       description:
-        "AI-powered chat application with real-time messaging capabilities. Features intelligent conversation handling, message history, and seamless user experience. Built with modern full-stack technologies for scalable and responsive communication.",
-      technologies: ["Next.js", "TypeScript", "React", "Node.js", "FastAPI", "Python", "WebSockets", "PostgreSQL", "Supabase", "Tailwind CSS"],
-      githubUrl: "https://github.com/shilojeyaraj/Shilo-chat",
-      featured: false,
-      icon: Sparkles
+        "AI-powered skincare analysis application built for Google Cloud AI Accelerate Hackathon. Uses Google Gemini 1.5 Pro for medical-grade skin analysis, Elasticsearch for intelligent product recommendations, and Fivetran for automated data ingestion. Features real-time data pipeline, Google Cloud integration (BigQuery, Cloud Storage, Vertex AI), and secure authentication with Supabase.",
+      technologies: ["Next.js", "TypeScript", "FastAPI", "Python", "Google Gemini 1.5 Pro", "Elasticsearch", "Fivetran", "Supabase", "Google Cloud Platform", "BigQuery", "Vertex AI", "Tailwind CSS", "Radix UI", "Docker"],
+      githubUrl: "https://github.com/shilojeyaraj/Dermalens",
+      projectUrl: "", // Add deployed URL here when available
+      featured: true,
+      icon: Search
     },
     {
       title: "Elective Chooser - Course Selection Platform",
@@ -462,9 +456,31 @@ const ProjectsSection = () => {
         "Web application designed to assist students in selecting elective courses by providing detailed information, reviews, and recommendations. Streamlines the decision-making process for course selection with intuitive interface and comprehensive course data.",
       technologies: ["React", "Next.js", "TypeScript", "FastAPI", "Python", "PostgreSQL", "Supabase", "Tailwind CSS", "Docker"],
       githubUrl: "https://github.com/shilojeyaraj/Elective-chooser",
+      projectUrl: "", // Add deployed URL here when available
       featured: false,
       icon: GraduationCap
     },
+    {
+      title: "Mid Chats - AI-Powered Chat Application",
+      description:
+        "Fully functioning personal chat application with real-time messaging capabilities. Features personal info storage for resume and cover letter building, along with comprehensive \"study mode\" function, intelligent conversation handling, message history, and seamless user experience. Built with modern full-stack technologies for scalable and responsive communication.",
+      technologies: ["Next.js", "TypeScript", "React", "Node.js", "FastAPI", "Python", "WebSockets", "PostgreSQL", "Supabase", "Tailwind CSS"],
+      githubUrl: "https://github.com/shilojeyaraj/Shilo-chat",
+      projectUrl: "", // Add deployed URL here when available
+      featured: false,
+      icon: Sparkles
+    },
+    {
+      title: "Global Solar Panel Energy Calculator",
+      description:
+        "Web app that estimates annual solar output using NASA irradiance data. Python backend with a lightweight HTML/CSS front end; calculates per-panel output by location and panel efficiency.",
+      technologies: ["Python", "Flask", "REST API", "JavaScript", "HTML/CSS"],
+      githubUrl: "https://github.com/shilojeyaraj/solar-energy-calculator",
+      projectUrl: "", // Add deployed URL here when available
+      featured: false,
+      icon: Sun
+    },
+    // Other projects (without deployed links) - at the bottom
     {
       title: "Gym Posture Corrector (Real-Time Form Feedback)",
       description:
@@ -473,15 +489,6 @@ const ProjectsSection = () => {
       githubUrl: "https://github.com/shilojeyaraj/gym-motion-capture",
       featured: false,
       icon: Activity
-    },
-    {
-      title: "Global Solar Panel Energy Calculator",
-      description:
-        "Web app that estimates annual solar output using NASA irradiance data. Python backend with a lightweight HTML/CSS front end; calculates per-panel output by location and panel efficiency.",
-      technologies: ["Python", "Flask", "REST API", "JavaScript", "HTML/CSS"],
-      githubUrl: "https://github.com/shilojeyaraj/solar-energy-calculator",
-      featured: false,
-      icon: Sun
     },
     {
       title: "OCR Image Scanner / Medical Document Analyzer",
@@ -509,15 +516,6 @@ const ProjectsSection = () => {
       githubUrl: "https://github.com/shilojeyaraj/VPD-proposal",
       featured: false,
       icon: Brain
-    },
-    {
-      title: "AI GPS Voice Assistant",
-      description:
-        "Voice assistant for directions and POIs with real-time speech recognition/NLP and a Python backend.",
-      technologies: ["Python", "Speech Recognition", "NLP", "Flask"],
-      githubUrl: "https://github.com/shilojeyaraj/AI-Voice-assistant",
-      featured: false,
-      icon: Mic
     },
     {
       title: "ROS2 TurtleBot Wrapper / Autonomy Toolkit",
@@ -565,7 +563,7 @@ const ProjectsSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                className={`group relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 ${
+                className={`group relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 flex flex-col ${
                   project.featured ? 'md:col-span-1' : ''
                 }`}
               >
@@ -583,28 +581,13 @@ const ProjectsSection = () => {
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
                     <Icon className="w-8 h-8 text-primary" />
                   </div>
-
-                  {/* Hover overlay with GitHub only */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="border border-input bg-background/90 hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-9 px-3"
-                      >
-                        <Github className="w-4 h-4 mr-2" />
-                        Code
-                      </a>
-                    )}
-                  </div>
                 </div>
 
                 {/* Card body */}
-                <div className="p-6">
+                <div className="p-6 flex flex-col h-full">
                   <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                   <p className="text-muted-foreground mb-4 text-sm">{project.description}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech, techIndex) => (
                       <span
                         key={techIndex}
@@ -615,20 +598,33 @@ const ProjectsSection = () => {
                     ))}
                   </div>
 
-                  {/* Optional inline GitHub link */}
-                  {project.githubUrl && (
-                    <div className="mt-4">
+                  {/* Action buttons at the bottom */}
+                  <div className="mt-auto flex flex-col sm:flex-row gap-2 pt-4">
+                    {project.projectUrl && (
+                      <a
+                        href={project.projectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-9 px-4"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        View Project
+                      </a>
+                    )}
+                    {project.githubUrl && (
                       <a
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center text-sm text-primary hover:underline"
+                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 ${
+                          project.projectUrl ? 'flex-1' : 'w-full'
+                        }`}
                       >
                         <Github className="w-4 h-4 mr-2" />
                         View on GitHub
                       </a>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </motion.div>
             )
@@ -641,6 +637,54 @@ const ProjectsSection = () => {
 
 // Contact Section
 const ContactSection = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+    // Clear status when user starts typing
+    if (submitStatus.type) {
+      setSubmitStatus({ type: null, message: '' })
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus({ type: null, message: '' })
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSubmitStatus({ type: 'success', message: data.message || 'Message sent successfully!' })
+        setFormData({ name: '', email: '', message: '' })
+      } else {
+        setSubmitStatus({ type: 'error', message: data.error || 'Failed to send message. Please try again.' })
+      }
+    } catch (error) {
+      setSubmitStatus({ type: 'error', message: 'Failed to send message. Please try again.' })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <section id="contact" className="py-20 bg-muted/50">
       <div className="container mx-auto px-4">
@@ -698,27 +742,49 @@ const ContactSection = () => {
             className="rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 p-6"
           >
             <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Your Name"
+                required
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Your Email"
+                required
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
               <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Your Message"
                 rows={5}
+                required
                 className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
               />
+              {submitStatus.type && (
+                <div className={`p-3 rounded-md text-sm ${
+                  submitStatus.type === 'success' 
+                    ? 'bg-green-500/10 text-green-500 border border-green-500/20' 
+                    : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                }`}>
+                  {submitStatus.message}
+                </div>
+              )}
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2"
               >
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </motion.div>
