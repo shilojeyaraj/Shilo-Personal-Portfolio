@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import PhotoCarousel from '@/components/ui/PhotoCarousel'
 import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect'
 import { motion } from 'framer-motion'
@@ -101,10 +102,14 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
           >
             
-            <button className="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 rounded-md px-8">
+            <a 
+              href="/me/resume.pdf" 
+              download="Shilo_Jeyaraj_Resume.pdf"
+              className="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-11 px-8"
+            >
               <Download className="mr-2 h-4 w-4" />
               Download Resume
-            </button>
+            </a>
           </motion.div>
           
           {/* Social Links */}
@@ -431,34 +436,37 @@ const ProjectsSection = () => {
   const projects = [
     // Published projects (with deployed links) - at the top
     {
-      title: "Brain Battle - Interactive Quiz Platform",
+      title: "Brain Battle - Interactive Quizzing and Study Platform",
       description:
-        "Interactive quiz and trivia platform for competitive brain training. Features real-time multiplayer capabilities, scoring system, and diverse question categories. Built with modern web technologies for responsive gameplay and engaging user experience.",
-      technologies: ["React", "Next.js", "TypeScript", "Node.js", "WebSockets", "PostgreSQL", "Tailwind CSS", "Docker"],
+        "Production-ready platform for competitive brain training with real-time multiplayer capabilities. Features WebSocket-based live gameplay, dynamic scoring algorithms, and diverse question categories. Built with scalable microservices architecture, persistent leaderboards, and responsive design for engaging user experience.",
+      technologies: ["React", "Next.js", "TypeScript", "Node.js", "WebSockets", "PostgreSQL", "Supabase", "OpenAI API", "Tailwind CSS", "Framer Motion", "Vercel"],
       githubUrl: "https://github.com/shilojeyaraj/Brain-Battle",
-      projectUrl: "", // Add deployed URL here when available
+      projectUrl: "https://brain-battle.app",
       featured: false,
-      icon: Trophy
+      icon: Trophy,
+      imageUrl: "/projectimages/Brain-Battle-logo.png"
     },
     {
       title: "Dermalens - AI-Powered Skincare Analysis",
       description:
-        "AI-powered skincare analysis application built for Google Cloud AI Accelerate Hackathon. Uses Google Gemini 1.5 Pro for medical-grade skin analysis, Elasticsearch for intelligent product recommendations, and Fivetran for automated data ingestion. Features real-time data pipeline, Google Cloud integration (BigQuery, Cloud Storage, Vertex AI), and secure authentication with Supabase.",
-      technologies: ["Next.js", "TypeScript", "FastAPI", "Python", "Google Gemini 1.5 Pro", "Elasticsearch", "Fivetran", "Supabase", "Google Cloud Platform", "BigQuery", "Vertex AI", "Tailwind CSS", "Radix UI", "Docker"],
+        "Production-ready platform leveraging Gemini API for medical-grade skin analysis, Elasticsearch for intelligent recommendations, and real-time data pipelines. Features multi-angle facial scanning, personalized routines, and scalable microservices architecture on Google Cloud Platform.",
+      technologies: ["Next.js", "TypeScript", "FastAPI", "Python", "Gemini API", "Elasticsearch", "Fivetran", "Supabase", "GCP", "BigQuery", "Vertex AI", "Tailwind CSS", "Radix UI", "Docker", "Vercel"],
       githubUrl: "https://github.com/shilojeyaraj/Dermalens",
-      projectUrl: "", // Add deployed URL here when available
+      projectUrl: "https://dermalens.vercel.app",
       featured: true,
-      icon: Search
+      icon: Search,
+      imageUrl: "/projectimages/dermalens-logo.png"
     },
     {
-      title: "Elective Chooser - Course Selection Platform",
+      title: "Coursely - Waterloo Elective Advisor",
       description:
-        "Web application designed to assist students in selecting elective courses by providing detailed information, reviews, and recommendations. Streamlines the decision-making process for course selection with intuitive interface and comprehensive course data.",
-      technologies: ["React", "Next.js", "TypeScript", "FastAPI", "Python", "PostgreSQL", "Supabase", "Tailwind CSS", "Docker"],
+        "AI-powered platform helping engineering students choose electives through personalized recommendations. Built with Next.js, GPT-4o-mini, and RAG architecture featuring vector semantic search across 284+ courses. Includes natural language chat interface and intelligent course matching based on student profiles and career goals.",
+      technologies: ["React", "Next.js", "TypeScript", "OpenAI", "LangChain", "RAG", "PostgreSQL", "Supabase", "pgvector", "Python", "Tailwind CSS"],
       githubUrl: "https://github.com/shilojeyaraj/Elective-chooser",
-      projectUrl: "", // Add deployed URL here when available
-      featured: false,
-      icon: GraduationCap
+      projectUrl: "https://uwaterloo-course-chats.vercel.app",
+      featured: true,
+      icon: GraduationCap,
+      imageUrl: "/projectimages/coursely-logo.jpg"
     },
     {
       title: "Mid Chats - AI-Powered Chat Application",
@@ -466,9 +474,10 @@ const ProjectsSection = () => {
         "Fully functioning personal chat application with real-time messaging capabilities. Features personal info storage for resume and cover letter building, along with comprehensive \"study mode\" function, intelligent conversation handling, message history, and seamless user experience. Built with modern full-stack technologies for scalable and responsive communication.",
       technologies: ["Next.js", "TypeScript", "React", "Node.js", "FastAPI", "Python", "WebSockets", "PostgreSQL", "Supabase", "Tailwind CSS"],
       githubUrl: "https://github.com/shilojeyaraj/Shilo-chat",
-      projectUrl: "", // Add deployed URL here when available
+      projectUrl: "https://shilo-chat.vercel.app",
       featured: false,
-      icon: Sparkles
+      icon: Sparkles,
+      imageUrl: "/projectimages/Gemini_Generated_Image_57sanv57sanv57sa.png"
     },
     {
       title: "Global Solar Panel Energy Calculator",
@@ -476,9 +485,10 @@ const ProjectsSection = () => {
         "Web app that estimates annual solar output using NASA irradiance data. Python backend with a lightweight HTML/CSS front end; calculates per-panel output by location and panel efficiency.",
       technologies: ["Python", "Flask", "REST API", "JavaScript", "HTML/CSS"],
       githubUrl: "https://github.com/shilojeyaraj/solar-energy-calculator",
-      projectUrl: "", // Add deployed URL here when available
+      projectUrl: "https://solar-energy-calculator.vercel.app",
       featured: false,
-      icon: Sun
+      icon: Sun,
+      imageUrl: "/projectimages/solar-ai.png"
     },
     // Other projects (without deployed links) - at the bottom
     {
@@ -488,7 +498,8 @@ const ProjectsSection = () => {
       technologies: ["Python", "OpenCV", "MediaPipe", "TensorFlow", "Flask", "HTML/CSS", "JavaScript"],
       githubUrl: "https://github.com/shilojeyaraj/gym-motion-capture",
       featured: false,
-      icon: Activity
+      icon: Activity,
+      imageUrl: "/projectimages/gym-opencv-logo.jpg"
     },
     {
       title: "OCR Image Scanner / Medical Document Analyzer",
@@ -507,24 +518,6 @@ const ProjectsSection = () => {
       githubUrl: "https://github.com/shilojeyaraj/Fitness-plan-maker",
       featured: false,
       icon: Utensils
-    },
-    {
-      title: "Value Proposition Design (VPD) Prompt Optimization",
-      description:
-        "Python framework to benchmark and score prompt strategies for generating high-quality business proposals; integrates OpenAI models with an HTML interface.",
-      technologies: ["Python", "OpenAI API", "Flask", "JavaScript", "Prompt Engineering"],
-      githubUrl: "https://github.com/shilojeyaraj/VPD-proposal",
-      featured: false,
-      icon: Brain
-    },
-    {
-      title: "ROS2 TurtleBot Wrapper / Autonomy Toolkit",
-      description:
-        "ROS2 modules for robot control, lidar/IMU/camera integration, and logging; supports rapid experimentation in autonomy pipelines.",
-      technologies: ["ROS 2", "Python", "OpenCV", "Sensors (Lidar/IMU/Camera)"],
-      githubUrl: "https://github.com/Taha-M567/toyota-hackathon",
-      featured: false,
-      icon: Bot
     },
     {
       title: "Tic Tac Toe Playing VEX Robot",
@@ -568,25 +561,62 @@ const ProjectsSection = () => {
                 }`}
               >
                 {/* Project image/logo header */}
-                <div className="relative h-64 md:h-72 flex items-center justify-center bg-primary/5">
-                  <div className="absolute top-4 left-4">
-                    {project.featured && (
-                      <div className="flex items-center bg-primary text-primary-foreground px-2 py-1 rounded-full text-xs font-medium">
-                        <Star className="w-3 h-3 mr-1" />
-                        Featured
-                      </div>
-                    )}
-                  </div>
+                <div className={`relative h-48 md:h-56 flex items-center justify-center overflow-hidden group/image ${
+                  project.imageUrl 
+                    ? project.title.includes('Brain Battle') 
+                      ? 'bg-[#0D1137]' 
+                      : project.title.includes('Dermalens')
+                        ? 'bg-gradient-to-br from-[#F0FFF4] via-[#D1FAE5] to-[#A7F3D0]'
+                        : project.title.includes('Solar')
+                          ? 'bg-gradient-to-br from-[#0D1B2A] via-[#2A52BE] to-[#8A2BE2]'
+                          : 'bg-white'
+                    : 'bg-primary/5'
+                }`}>
 
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-                    <Icon className="w-8 h-8 text-primary" />
-                  </div>
+                  {project.imageUrl ? (
+                    <div className={`relative w-full h-full flex items-center justify-center ${
+                      project.title.includes('Dermalens') ? 'p-0' : 'p-4'
+                    }`}>
+                      <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        fill
+className={`${
+                           project.title.includes('Dermalens') ? 'object-contain scale-[3.25]' : 
+                            project.title.includes('Solar') ? 'object-cover scale-150' : 'object-contain'
+                          }`}
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                      <Icon className="w-8 h-8 text-primary" />
+                    </div>
+                  )}
+
+                  {/* Hover overlay with View Live button */}
+                  {(project.title.includes('Brain Battle') || 
+                    project.title.includes('Dermalens') || 
+                    project.title.includes('Coursely') || 
+                    project.title.includes('Mid Chats')) && project.projectUrl ? (
+                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                      <a
+                        href={project.projectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-10 px-6"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        View Live
+                      </a>
+                    </div>
+                  ) : null}
                 </div>
 
                 {/* Card body */}
-                <div className="p-6 flex flex-col h-full">
-                  <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                  <p className="text-muted-foreground mb-4 text-sm">{project.description}</p>
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="text-xl font-semibold mb-1.5">{project.title}</h3>
+                  <p className="text-muted-foreground mb-3 text-sm">{project.description}</p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.technologies.map((tech, techIndex) => (
                       <span
@@ -599,7 +629,7 @@ const ProjectsSection = () => {
                   </div>
 
                   {/* Action buttons at the bottom */}
-                  <div className="mt-auto flex flex-col sm:flex-row gap-2 pt-4">
+                  <div className="mt-auto flex flex-col sm:flex-row gap-2">
                     {project.projectUrl && (
                       <a
                         href={project.projectUrl}
@@ -608,7 +638,7 @@ const ProjectsSection = () => {
                         className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-9 px-4"
                       >
                         <ExternalLink className="w-4 h-4 mr-2" />
-                        View Project
+                        View Live
                       </a>
                     )}
                     {project.githubUrl && (
