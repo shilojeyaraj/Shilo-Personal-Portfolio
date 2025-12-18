@@ -45,8 +45,18 @@ export default function PhotoCarousel({ images, className = '', rounded = 'round
   }
   
   const next = () => {
-    const newIndex = (index + 1) % images.length
-    scrollTo(newIndex)
+    const el = scrollerRef.current
+    if (!el) return
+    
+    // If we're at the last slide, wrap around to the first
+    if (index === images.length - 1) {
+      // Reset to first slide
+      el.scrollTo({ left: 0, behavior: 'smooth' })
+      setIndex(0)
+    } else {
+      const newIndex = index + 1
+      scrollTo(newIndex)
+    }
   }
   
   const prev = () => {
