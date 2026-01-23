@@ -29,7 +29,8 @@ import {
    Sparkles,
    GraduationCap,
    Trophy,
-   Search
+   Search,
+   Play
 
 } from 'lucide-react'
 
@@ -436,6 +437,18 @@ const ProjectsSection = () => {
   const projects = [
     // Published projects (with deployed links) - at the top
     {
+      title: "Proof - Real-Time Polymarket Intelligence Extension",
+      description:
+        "Chrome extension that adds real-time intelligence directly on Polymarket market pages. Won 2nd place in the Polymarket track at NexHacks 2026 @ CMU. Turns raw markets into informed decisions by surfacing correlation, context, and momentum where trades happen. Features related markets, trending markets, and real-world news integration.",
+      technologies: ["React", "TypeScript", "FastAPI", "Python", "Supabase", "Polymarket API", "GNews.io", "Chrome Extension", "Vercel", "Render"],
+      githubUrl: "https://github.com/sinhashivani/NexHacks",
+      projectUrl: null,
+      demoUrl: "/projectimages/NexHacks Video Demo.mp4",
+      featured: true,
+      icon: Trophy,
+      imageUrl: "/projectimages/proofp.png"
+    },
+    {
       title: "Brain Battle - Interactive Quizzing and Study Platform",
       description:
         "Production-ready platform for competitive brain training with real-time multiplayer capabilities. Features WebSocket-based live gameplay, dynamic scoring algorithms, and diverse question categories. Built with scalable microservices architecture, persistent leaderboards, and responsive design for engaging user experience.",
@@ -563,13 +576,15 @@ const ProjectsSection = () => {
                 {/* Project image/logo header */}
                 <div className={`relative h-48 md:h-56 flex items-center justify-center overflow-hidden group/image ${
                   project.imageUrl 
-                    ? project.title.includes('Brain Battle') 
-                      ? 'bg-[#0D1137]' 
-                      : project.title.includes('Dermalens')
-                        ? 'bg-gradient-to-br from-[#F0FFF4] via-[#D1FAE5] to-[#A7F3D0]'
-                        : project.title.includes('Solar')
-                          ? 'bg-gradient-to-br from-[#0D1B2A] via-[#2A52BE] to-[#8A2BE2]'
-                          : 'bg-white'
+                    ? project.title.includes('Proof')
+                      ? 'bg-[#1e3a8a]'
+                      : project.title.includes('Brain Battle') 
+                        ? 'bg-[#0D1137]' 
+                        : project.title.includes('Dermalens')
+                          ? 'bg-gradient-to-br from-[#F0FFF4] via-[#D1FAE5] to-[#A7F3D0]'
+                          : project.title.includes('Solar')
+                            ? 'bg-gradient-to-br from-[#0D1B2A] via-[#2A52BE] to-[#8A2BE2]'
+                            : 'bg-white'
                     : 'bg-primary/5'
                 }`}>
 
@@ -594,20 +609,30 @@ className={`${
                     </div>
                   )}
 
-                  {/* Hover overlay with View Live button */}
-                  {(project.title.includes('Brain Battle') || 
+                  {/* Hover overlay with View Live/Demo button */}
+                  {((project.title.includes('Brain Battle') || 
                     project.title.includes('Dermalens') || 
                     project.title.includes('Coursely') || 
-                    project.title.includes('Mid Chats')) && project.projectUrl ? (
+                    project.title.includes('Mid Chats')) && project.projectUrl) ||
+                    (project.title.includes('Proof') && (project.projectUrl || project.demoUrl)) ? (
                     <div className="absolute inset-0 bg-black/70 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
                       <a
-                        href={project.projectUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={(project.demoUrl || project.projectUrl || '') as string}
+                        target={project.demoUrl ? undefined : "_blank"}
+                        rel={project.demoUrl ? undefined : "noopener noreferrer"}
                         className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-10 px-6"
                       >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        View Live
+                        {project.demoUrl ? (
+                          <>
+                            <Play className="w-4 h-4 mr-2" />
+                            Watch Demo
+                          </>
+                        ) : (
+                          <>
+                            <ExternalLink className="w-4 h-4 mr-2" />
+                            View Live
+                          </>
+                        )}
                       </a>
                     </div>
                   ) : null}
@@ -630,12 +655,23 @@ className={`${
 
                   {/* Action buttons at the bottom */}
                   <div className="mt-auto flex flex-col sm:flex-row gap-2">
+                    {project.demoUrl && (
+                      <a
+                        href={project.demoUrl}
+                        className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-9 px-4"
+                      >
+                        <Play className="w-4 h-4 mr-2" />
+                        Watch Demo
+                      </a>
+                    )}
                     {project.projectUrl && (
                       <a
                         href={project.projectUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-9 px-4"
+                        className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-9 px-4 ${
+                          project.demoUrl ? '' : ''
+                        }`}
                       >
                         <ExternalLink className="w-4 h-4 mr-2" />
                         View Live
@@ -647,7 +683,7 @@ className={`${
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 ${
-                          project.projectUrl ? 'flex-1' : 'w-full'
+                          (project.projectUrl || project.demoUrl) ? 'flex-1' : 'w-full'
                         }`}
                       >
                         <Github className="w-4 h-4 mr-2" />
