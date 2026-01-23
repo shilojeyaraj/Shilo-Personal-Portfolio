@@ -301,6 +301,19 @@ const AboutSection = () => {
 const ExperienceSection = () => {
   const experiences = [
     {
+      title: "Machine Learning Research & Development Intern",
+      company: "Perceivable Design Studios Inc.",
+      location: "Remote",
+      duration: "Jan 2026 - Present",
+      type: "Internship",
+      description: "Leveraging extensive machine learning experience to research and develop multimodal translation frameworks that bridge ASL and speech, with a focus on real-time performance optimization and model deployment.",
+      achievements: [
+        "Researched and developed a multimodal translation framework in Python to bridge ASL and speech; engineered a streaming ASR pipeline by fine-tuning Whisper via Torchaudio, optimizing the model for low-resource environments through iterative hyperparameter tuning and NumPy-based signal processing",
+        "Engineered custom PyTorch Transformer architectures to model complex temporal dependencies in sign language, utilizing MediaPipe skeletal hand-tracking data to achieve 95% gesture recognition accuracy across diverse datasets via advanced data augmentation and OpenCV preprocessing",
+        "Optimized model inference and deployment cycles by evaluating the trade-offs between accuracy and latency; implemented ONNX quantization and WebSocket synchronization to reduce end-to-end lag by 40%, validating research benchmarks on edge hardware to ensure real-time performance"
+      ]
+    },
+    {
       title: "Software Engineering Intern",
       company: "Friedmann AI",
       location: "Oakville, ON",
@@ -341,20 +354,6 @@ const ExperienceSection = () => {
         "Developing computer vision pipelines with Python and ML models to increase drone navigation accuracy",
         "Optimizing autonomy algorithms for object detection, landing precision, and flight stability",
         "Collaborating with a multidisciplinary team to integrate autonomy modules into larger UAV systems"
-      ]
-    },
-      {
-      title: "Electrical Team Member",
-      company: "University of Waterloo Baja SAE Design Team",
-      location: "Waterloo, ON",
-      duration: "May 2025 – August 2025",
-      type: "Extracurricular",
-      description:
-        "Supported the design and optimization of electrical systems for an off-road vehicle in a competitive engineering design team.",
-      achievements: [
-        "Boosted circuit reliability by 30% through low-voltage system design and simulation",
-        "Designed custom PCBs to regulate and protect internal components, reducing voltage issues by 45%",
-        "Enhanced performance analysis by 25% by integrating data acquisition with accelerometers, RPM sensors, and strain gauges"
       ]
     }
   ]
