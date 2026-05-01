@@ -1,693 +1,831 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import PhotoCarousel from '@/components/ui/PhotoCarousel'
-import { TypewriterEffectSmooth } from '@/components/ui/typewriter-effect'
-import { motion } from 'framer-motion'
-import { 
-  Github, 
-  Linkedin, 
-  Mail, 
-  ExternalLink, 
-  Code, 
-  Palette, 
-  Zap,
-  Download,
-  ArrowRight,
-  MapPin,
-  Calendar,
-  Star,
-  Activity,
-   Sun, 
-   FileText, 
-   Utensils, 
-   Brain, 
-   Mic, 
-   Bot, 
-   Gamepad2,
-   Sparkles,
-   GraduationCap,
-   Trophy,
-   Search,
-   Play
-
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Github, Linkedin, Mail, Play, ExternalLink, Send, X, Menu,
+  Trophy, GraduationCap, Activity, FileText, Utensils, Gamepad2, Sun, Sparkles, Search
 } from 'lucide-react'
 
-// Hero Section
+// ─── DATA ──────────────────────────────────────────────────────────
+
+const experiences = [
+  {
+    title: "Machine Learning Research Engineer",
+    company: "Cohere Labs",
+    location: "Toronto, ON",
+    duration: "Jan 2026 – Present",
+    type: "Internship",
+    brandColor: "#6B4A42",
+    logoUrl: "/me/cohere logo.png" as string | null,
+    description: "Independently architecting ML research frameworks focused on continuous model adaptation, hallucination reduction, and memory-efficient inference for large language models.",
+    achievements: [
+      "Architected a PyTorch-based Modular Adaptive Agent (MAA) framework integrating inference-time JitRL and Functional LoRA for continuous on-the-fly model adaptation, mitigating catastrophic forgetting across non-stationary environments including WebArena",
+      "Reduced false-positive hallucination flagging by 40% across LLaMA 3.1 8B outputs by engineering an Adaptation-Grounding Resolution (AGR) verification protocol with derivation-aware consistency scoring validated through automated multi-pass test suites",
+      "Cut LLM inference memory footprint by over 60% on consumer-grade hardware via 4-bit quantization and stateless architectural design, achieving low-latency offline RAG inference on LLaMA 3.1 8B"
+    ]
+  },
+  {
+    title: "Machine Learning Research & Development Intern",
+    company: "Perceivable Design Studios Inc.",
+    location: "Remote",
+    duration: "Jan 2026 – Present",
+    type: "Internship",
+    brandColor: "#6B8E9F",
+    logoUrl: "/me/Perciabalelogo.png" as string | null,
+    description: "Researched and developed multimodal translation frameworks bridging ASL and speech with real-time performance optimization.",
+    achievements: [
+      "Fine-tuned Whisper via Torchaudio for a streaming ASR pipeline, optimizing for low-resource environments with NumPy-based signal processing",
+      "Engineered custom PyTorch Transformers with MediaPipe skeletal hand-tracking, achieving 95% gesture recognition accuracy",
+      "Implemented ONNX quantization and WebSocket sync to reduce end-to-end lag by 40%"
+    ]
+  },
+  {
+    title: "Software Engineering Intern",
+    company: "Friedmann AI",
+    location: "Oakville, ON",
+    duration: "Sep 2025 – Present",
+    type: "Full-time",
+    brandColor: "#2C3E50",
+    logoUrl: "/me/friedmannlogo.png" as string | null,
+    description: "Developing AI-powered chatbot features and financial planning tools for advisor clients.",
+    achievements: [
+      "Implemented complete Calendly integration improving demo scheduling efficiency for 30+ clients",
+      "Enhanced financial plan generator with a 1,200+ line prompt engineering system for FP Canada compliance",
+      "Built comprehensive advisor profile management system with API endpoints and settings UI",
+      "Reduced development workflow time by 75% via test signup endpoint and auth bypass infrastructure"
+    ]
+  },
+  {
+    title: "Software Engineer Intern",
+    company: "Normative",
+    location: "Toronto, ON (Remote)",
+    duration: "Jan 2025 – Apr 2025",
+    type: "Internship",
+    brandColor: "#5A7C5F",
+    logoUrl: "/me/orbitive.jpg" as string | null,
+    description: "Contributed to full-stack and AI development, enhancing internal tools and building AI-powered document processing.",
+    achievements: [
+      "Built and enhanced internal site using Retool and JavaScript, improving usability for 30+ team members",
+      "Created an OCR document processing system improving text recognition accuracy by 75%",
+      "Developed AI-driven business proposal generation using reinforcement learning and Python"
+    ]
+  },
+  {
+    title: "Autonomy Team Member",
+    company: "Waterloo Aerial Robotics Group (WARG)",
+    location: "Waterloo, ON",
+    duration: "May 2025 – Present",
+    type: "Extracurricular",
+    brandColor: "#6B5B4F",
+    logoUrl: "/me/Uwaterloo_logo.png" as string | null,
+    description: "Working on autonomy systems for drone navigation and perception using Python and ML.",
+    achievements: [
+      "Developing computer vision pipelines to increase drone navigation accuracy",
+      "Optimizing autonomy algorithms for object detection, landing precision, and flight stability",
+      "Collaborating on integration of autonomy modules into larger UAV systems"
+    ]
+  }
+]
+
+const projects = [
+  {
+    title: "Proof",
+    category: "Chrome Extension",
+    description: "Chrome extension adding real-time intelligence on Polymarket pages. Won 2nd place in the Polymarket track at NexHacks 2026 @ CMU.",
+    technologies: ["React", "TypeScript", "FastAPI", "Supabase", "Polymarket API", "Chrome Extension"],
+    githubUrl: "https://github.com/sinhashivani/NexHacks",
+    projectUrl: null as string | null,
+    demoUrl: "/projectimages/NexHacks Video Demo.mp4" as string | null,
+    imageUrl: "/projectimages/proofp.png",
+    headerBg: "#1e3a8a",
+    icon: Trophy
+  },
+  {
+    title: "Dermalens",
+    category: "AI Platform",
+    description: "Production-ready AI skincare analysis platform with Gemini API, multi-angle facial scanning, and GCP data pipelines.",
+    technologies: ["Next.js", "FastAPI", "Gemini API", "Elasticsearch", "GCP", "BigQuery", "Docker"],
+    githubUrl: "https://github.com/shilojeyaraj/Dermalens",
+    projectUrl: "https://dermalens.vercel.app" as string | null,
+    demoUrl: null as string | null,
+    imageUrl: "/projectimages/Dermalens-logo.png",
+    headerBg: "linear-gradient(135deg, #F0FFF4, #D1FAE5, #A7F3D0)",
+    icon: Search
+  },
+  {
+    title: "Coursely",
+    category: "AI Advisor",
+    description: "AI Waterloo elective advisor with RAG architecture, GPT-4o-mini, and vector semantic search across 284+ courses.",
+    technologies: ["Next.js", "OpenAI", "LangChain", "pgvector", "PostgreSQL", "TypeScript"],
+    githubUrl: "https://github.com/shilojeyaraj/Elective-chooser",
+    projectUrl: "https://uwaterloo-course-chats.vercel.app" as string | null,
+    demoUrl: null as string | null,
+    imageUrl: "/projectimages/coursely-logo.jpg",
+    headerBg: "#F8F8F8",
+    icon: GraduationCap
+  },
+  {
+    title: "Brain Battle",
+    category: "Multiplayer Platform",
+    description: "Competitive brain training platform with real-time WebSocket multiplayer, dynamic scoring, and persistent leaderboards.",
+    technologies: ["React", "Next.js", "Node.js", "WebSockets", "PostgreSQL", "OpenAI"],
+    githubUrl: "https://github.com/shilojeyaraj/Brain-Battle",
+    projectUrl: "https://brain-battle.app" as string | null,
+    demoUrl: null as string | null,
+    imageUrl: "/projectimages/Brain-Battle-logo.png",
+    headerBg: "#0D1137",
+    icon: Trophy
+  },
+  {
+    title: "Mid Chats",
+    category: "AI Chat App",
+    description: "AI chat application with real-time messaging, study mode, and resume/cover letter building features.",
+    technologies: ["Next.js", "FastAPI", "WebSockets", "PostgreSQL", "Supabase", "TypeScript"],
+    githubUrl: "https://github.com/shilojeyaraj/Shilo-chat",
+    projectUrl: "https://shilo-chat.vercel.app" as string | null,
+    demoUrl: null as string | null,
+    imageUrl: "/projectimages/Gemini_Generated_Image_57sanv57sanv57sa.png",
+    headerBg: "#1a1a2e",
+    icon: Sparkles
+  },
+  {
+    title: "Solar Panel Calculator",
+    category: "Web Tool",
+    description: "Web app estimating annual solar output using NASA irradiance data, with per-panel calculation by location and efficiency.",
+    technologies: ["Python", "Flask", "REST API", "JavaScript", "HTML/CSS"],
+    githubUrl: "https://github.com/shilojeyaraj/solar-energy-calculator",
+    projectUrl: "https://solar-energy-calculator.vercel.app" as string | null,
+    demoUrl: null as string | null,
+    imageUrl: "/projectimages/solar-ai.png",
+    headerBg: "linear-gradient(135deg, #0D1B2A, #2A52BE, #8A2BE2)",
+    icon: Sun
+  },
+  {
+    title: "Gym Posture Corrector",
+    category: "Computer Vision",
+    description: "Real-time posture analysis using OpenCV/MediaPipe skeletal keypoints and TensorFlow classifier for instant form feedback.",
+    technologies: ["Python", "OpenCV", "MediaPipe", "TensorFlow", "Flask"],
+    githubUrl: "https://github.com/shilojeyaraj/gym-motion-capture",
+    projectUrl: null as string | null,
+    demoUrl: null as string | null,
+    imageUrl: "/projectimages/gym-opencv-logo.jpg",
+    headerBg: "#1a1a1a",
+    icon: Activity
+  },
+  {
+    title: "OCR Document Analyzer",
+    category: "ML Pipeline",
+    description: "OCR pipeline with Python + OpenAI APIs extracting structured info from scanned PDFs with clean review and export UI.",
+    technologies: ["Python", "OpenAI API", "OCR", "Flask", "HTML/CSS"],
+    githubUrl: "https://github.com/shilojeyaraj/normativemxocr",
+    projectUrl: null as string | null,
+    demoUrl: null as string | null,
+    imageUrl: null,
+    headerBg: "#2d3748",
+    icon: FileText
+  },
+  {
+    title: "Nutrition/Fitness Plan Builder",
+    category: "AI Tool",
+    description: "Generates tailored workout and meal plans based on user goals and dietary restrictions using Gemini API via Flask.",
+    technologies: ["Python", "Flask", "Gemini API", "HTML/CSS", "JavaScript"],
+    githubUrl: "https://github.com/shilojeyaraj/Fitness-plan-maker",
+    projectUrl: null as string | null,
+    demoUrl: null as string | null,
+    imageUrl: null,
+    headerBg: "#2d4a3e",
+    icon: Utensils
+  },
+  {
+    title: "Tic Tac Toe VEX Robot",
+    category: "Robotics",
+    description: "VEX robot playing Tic Tac Toe using computer vision for board state recognition and mechanical piece placement.",
+    technologies: ["C++", "VEX", "Robot C", "Computer Vision"],
+    githubUrl: "https://github.com/behzadwaseem/Tic-Tac-Tron",
+    projectUrl: null as string | null,
+    demoUrl: null as string | null,
+    imageUrl: null,
+    headerBg: "#3d2b1f",
+    icon: Gamepad2
+  }
+]
+
+// ─── EXPERIENCE MODAL ──────────────────────────────────────────────
+
+type Experience = typeof experiences[0]
+
+const ExperienceModal = ({ exp, onClose }: { exp: Experience | null; onClose: () => void }) => {
+  useEffect(() => {
+    if (!exp) return
+    const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [exp, onClose])
+
+  return (
+    <AnimatePresence>
+      {exp && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+            className="fixed inset-0 z-50 flex items-center justify-center px-4 pointer-events-none"
+          >
+            <div
+              className="bg-white rounded-2xl overflow-hidden w-full max-w-lg max-h-[85vh] overflow-y-auto pointer-events-auto"
+              style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Logo / brand block */}
+              <div
+                className="h-36 relative overflow-hidden flex items-end shrink-0"
+                style={{ background: exp.logoUrl ? '#f5f5f5' : exp.brandColor }}
+              >
+                {exp.logoUrl ? (
+                  <Image
+                    src={exp.logoUrl}
+                    alt={exp.company}
+                    fill
+                    className="object-cover object-center"
+                    sizes="512px"
+                  />
+                ) : (
+                  <span
+                    className="px-6 pb-3 leading-none select-none"
+                    style={{
+                      fontFamily: 'Playfair Display, serif',
+                      fontSize: '80px',
+                      color: 'rgba(255,255,255,0.2)',
+                      fontWeight: '600'
+                    }}
+                  >
+                    {exp.company[0]}
+                  </span>
+                )}
+                <button
+                  onClick={onClose}
+                  className="absolute top-3 right-3 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors"
+                  aria-label="Close"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <div className="p-8">
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div>
+                    <h2 className="mb-1" style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', color: '#111' }}>
+                      {exp.company}
+                    </h2>
+                    <p className="font-medium text-sm" style={{ color: '#C0634A' }}>{exp.title}</p>
+                  </div>
+                  <span
+                    className="shrink-0 inline-flex px-3 py-1 rounded-full text-xs text-white font-medium"
+                    style={{ backgroundColor: exp.brandColor }}
+                  >
+                    {exp.type}
+                  </span>
+                </div>
+
+                <div className="flex gap-3 text-xs mb-6" style={{ color: '#888' }}>
+                  <span>{exp.duration}</span>
+                  <span>·</span>
+                  <span>{exp.location}</span>
+                </div>
+
+                <p className="text-sm leading-relaxed mb-6" style={{ color: '#555' }}>{exp.description}</p>
+
+                <p className="text-xs uppercase mb-3" style={{ color: '#888', letterSpacing: '0.05em' }}>Key contributions</p>
+                <ul className="space-y-3">
+                  {exp.achievements.map((a, i) => (
+                    <li key={i} className="text-sm flex items-start gap-3" style={{ color: '#444' }}>
+                      <span className="w-1.5 h-1.5 rounded-full mt-[7px] shrink-0" style={{ backgroundColor: '#C0634A' }} />
+                      {a}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
+}
+
+// ─── PROJECT MODAL ─────────────────────────────────────────────────
+
+type Project = typeof projects[0]
+
+const ProjectModal = ({ project, onClose }: { project: Project | null; onClose: () => void }) => {
+  useEffect(() => {
+    if (!project) return
+    const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [project, onClose])
+
+  return (
+    <AnimatePresence>
+      {project && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-8 pointer-events-none"
+          >
+            <div
+              className="bg-white rounded-2xl overflow-hidden max-w-2xl w-full pointer-events-auto"
+              style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Image with close button */}
+              <div className="relative h-64 overflow-hidden" style={{ background: project.headerBg }}>
+                {project.imageUrl ? (
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    className={
+                      project.title === 'Dermalens' ? 'object-contain scale-[2.8]' :
+                      project.title === 'Solar Panel Calculator' ? 'object-cover scale-125' :
+                      'object-contain'
+                    }
+                    sizes="672px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <project.icon className="w-16 h-16" style={{ color: 'rgba(255,255,255,0.4)' }} />
+                  </div>
+                )}
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-md hover:bg-gray-50 transition-colors"
+                  aria-label="Close"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="p-8">
+                <div className="text-xs mb-2" style={{ color: '#888', letterSpacing: '0.05em' }}>
+                  {project.category.toUpperCase()}
+                </div>
+                <h2 className="mb-4" style={{ fontFamily: 'Playfair Display, serif', fontSize: '32px', color: '#111' }}>
+                  {project.title}
+                </h2>
+                <p className="text-sm mb-5" style={{ color: '#555', lineHeight: '1.7' }}>{project.description}</p>
+
+                <div className="flex flex-wrap gap-4 mb-6">
+                  {project.projectUrl && (
+                    <a
+                      href={project.projectUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm inline-flex items-center gap-1 hover:opacity-70 transition-opacity"
+                      style={{ color: '#C0634A' }}
+                    >
+                      Visit website <ExternalLink size={12} />
+                    </a>
+                  )}
+                  {project.demoUrl && (
+                    <a
+                      href={project.demoUrl}
+                      className="text-sm inline-flex items-center gap-1 hover:opacity-70 transition-opacity"
+                      style={{ color: '#C0634A' }}
+                    >
+                      Watch demo <Play size={12} />
+                    </a>
+                  )}
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm inline-flex items-center gap-1 hover:opacity-70 transition-opacity"
+                      style={{ color: '#888' }}
+                    >
+                      GitHub <Github size={12} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap gap-2 pt-6 border-t" style={{ borderColor: '#e5e5e5' }}>
+                  {project.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 rounded-full text-xs"
+                      style={{ backgroundColor: '#f5f5f5', color: '#555' }}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
+}
+
+// ─── NAVIGATION ────────────────────────────────────────────────────
+
+const Navigation = ({ onOpenChat }: { onOpenChat: () => void }) => {
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const navLinks = ['About', 'Experience', 'Projects', 'Contact']
+
+  return (
+    <nav
+      className={`fixed top-0 w-full z-40 transition-all duration-300 ${
+        scrolled ? 'bg-white/90 backdrop-blur-sm shadow-sm' : 'bg-transparent'
+      }`}
+    >
+      <div className="w-full max-w-[1200px] mx-auto px-8 py-4 flex items-center justify-between">
+        <a
+          href="#"
+          className="text-xl font-semibold hover:opacity-70 transition-opacity"
+          style={{ fontFamily: 'Playfair Display, serif', color: '#111' }}
+        >
+          Shilo Jeyaraj
+        </a>
+
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-8">
+          <div className="flex items-center">
+            {navLinks.map((item, i) => (
+              <React.Fragment key={item}>
+                {i > 0 && <span className="mx-3 text-sm select-none" style={{ color: '#888' }}>·</span>}
+                <a
+                  href={`#${item.toLowerCase()}`}
+                  className="text-sm hover:text-[#C0634A] transition-colors"
+                  style={{ color: '#888' }}
+                >
+                  {item}
+                </a>
+              </React.Fragment>
+            ))}
+          </div>
+          <button
+            onClick={onOpenChat}
+            className="px-4 py-2 text-sm rounded-full hover:bg-[#C0634A] hover:text-white transition-all duration-200"
+            style={{ border: '2px solid #C0634A', color: '#C0634A' }}
+          >
+            Ask Shilo.ai ✦
+          </button>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden hover:opacity-70 transition-opacity"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          style={{ color: '#111' }}
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden overflow-hidden bg-white border-t"
+            style={{ borderColor: '#e5e5e5' }}
+          >
+            <div className="px-8 py-4 flex flex-col gap-3">
+              {navLinks.map((item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="text-sm hover:text-[#C0634A] transition-colors"
+                  style={{ color: '#888' }}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item}
+                </a>
+              ))}
+              <button
+                onClick={() => { onOpenChat(); setMobileOpen(false) }}
+                className="text-left text-sm font-medium"
+                style={{ color: '#C0634A' }}
+              >
+                Ask Shilo.ai ✦
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  )
+}
+
+// ─── HERO ──────────────────────────────────────────────────────────
+
 const HeroSection = () => {
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-purple-500/5" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]" />
-      
-      {/* Floating shapes */}
-      <motion.div
-        className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl"
-        animate={{ y: [-20, 20, -20] }}
-        transition={{ duration: 6, repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute bottom-20 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl"
-        animate={{ y: [20, -20, 20] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      />
-      
-      <div className="container mx-auto px-4 text-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
+    <section id="about" className="w-full max-w-[1200px] mx-auto px-8 min-h-screen flex items-center py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 w-full items-center">
+
+        {/* Left column */}
+        <div className="flex flex-col justify-center order-2 md:order-1">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-xs tracking-[0.2em] uppercase mb-6"
+            style={{ color: '#888' }}
+          >
+            Software Engineering · Machine Learning · Systems Design
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mb-6"
+            style={{
+              fontFamily: 'Playfair Display, serif',
+              fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+              color: '#111',
+              lineHeight: 1.1
+            }}
+          >
+            Hi, I&apos;m Shilo —{' '}
+            <em style={{ color: '#C0634A', fontStyle: 'italic' }}>a Mechatronics Engineer</em>{' '}
+            building at the intersection of AI and Robotics.
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-base mb-8 max-w-lg"
+            style={{ color: '#888', lineHeight: 1.6 }}
+          >
+            Mechatronics Engineering student at the University of Waterloo, currently
+            interning as an ML Research Engineer and Software Engineer. I build AI-powered
+            products, contribute to autonomous drone systems, and compete in hackathons.
+          </motion.p>
+
+          {/* Social icon links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-6 flex justify-center"
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex items-center gap-5"
           >
-            <div className="text-6xl md:text-8xl font-bold">
-              <TypewriterEffectSmooth 
-                words={[
-                  {
-                    text: "Hi,",
-                    className: "text-white",
-                  },
-                  {
-                    text: "I'm",
-                    className: "text-white",
-                  },
-                  {
-                    text: "Shilo",
-                    className: "text-gradient",
-                  },
-                ]}
-              />
-            </div>
-          </motion.div>
-          
-          <motion.p 
-            className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            I am a Mechatronics Engineering Student passionate in software development and robotics, along with creating innovative 
-            digital experiences with modern technologies and AI.
-          </motion.p>
-          
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            
-            <a 
-              href="/me/resume.pdf" 
-              download="Shilo_Jeyaraj_Resume.pdf"
-              className="border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-11 px-8"
+            <a
+              href="https://github.com/shilojeyaraj"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-70 transition-opacity"
+              style={{ color: '#888' }}
+              aria-label="GitHub"
             >
-              <Download className="mr-2 h-4 w-4" />
-              Download Resume
+              <Github size={24} />
+            </a>
+            <a
+              href="https://linkedin.com/in/shilo-jeyaraj"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-70 transition-opacity"
+              style={{ color: '#888' }}
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={24} />
+            </a>
+            <a
+              href="mailto:stjeyara@uwaterloo.ca"
+              className="hover:opacity-70 transition-opacity"
+              style={{ color: '#888' }}
+              aria-label="Email"
+            >
+              <Mail size={24} />
             </a>
           </motion.div>
-          
-          {/* Social Links */}
-          <motion.div 
-            className="flex justify-center space-x-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            {[
-              { icon: Github, href: 'https://github.com/shilojeyaraj', label: 'GitHub' },
-              { icon: Linkedin, href: 'https://linkedin.com/in/shilo-jeyaraj', label: 'LinkedIn' },
-              { icon: Mail, href: 'mailto:stjeyara@uwaterloo.ca', label: 'Email' }
-            ].map(({ icon: Icon, href, label }) => (
-              <motion.a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors duration-200 p-3 rounded-full hover:bg-primary/10"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Icon size={24} />
-                <span className="sr-only">{label}</span>
-              </motion.a>
-            ))}
-          </motion.div>
+        </div>
+
+        {/* Right column - portrait */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="flex items-center justify-center order-1 md:order-2"
+        >
+          <div className="relative w-full h-[500px]">
+            <Image
+              src="/me/Normative.PNG"
+              alt="Shilo Jeyaraj"
+              fill
+              className="object-cover rounded-xl"
+              priority
+            />
+          </div>
         </motion.div>
-        
-        {/* Scroll indicator */}
-        
+
       </div>
     </section>
   )
 }
 
-// About Section
+// ─── EXPERIENCE ────────────────────────────────────────────────────
 
-import { Layout, Server, Wrench, Cpu, Cloud, Database } from "lucide-react" // icons
-
-
-
-const AboutSection = () => {
-  const skills = [
-    {
-      icon: Code,
-      title: "Languages & Frameworks",
-      description:
-        "Python, TypeScript, JavaScript, SQL, Java, C/C++, HTML/CSS, Bash. React, Next.js, Node.js, FastAPI, Flask, TensorFlow, PyTorch, Pandas, NumPy, Tailwind CSS, Framer Motion, OpenCV, MediaPipe, OCR."
-    },
-    {
-      icon: Cloud,
-      title: "Cloud Infrastructure & DevOps",
-      description:
-        "Google Cloud Platform (Vertex AI, BigQuery, Cloud Run), AWS, Docker, PostgreSQL, Supabase, Git, Linux, Elasticsearch, MongoDB, WebSockets, Cloudflare."
-    },
-    {
-      icon: Brain,
-      title: "AI & Data Tools",
-      description:
-        "OpenAI API, LangChain, Google Gemini, Pgvector, Vertex AI SDKs, Claude Code, Cursor, Vector Embeddings, Fivetran, REST APIs, ROS 2."
-    },
-    {
-      icon: Wrench,
-      title: "Mechanical & Hardware Engineering",
-      description:
-        "AutoCAD, SolidWorks, PCB design, circuit design, and machine shop tools for hardware integration."
-    }
-  ]
+const ExperienceSection = () => {
+  const [selectedExp, setSelectedExp] = useState<Experience | null>(null)
 
   return (
-    <section id="about" className="py-20 bg-muted/50">
-      <div className="container mx-auto px-4">
-
-        {/* About Me Heading */}
+    <section id="experience" className="py-20">
+      <div className="w-full max-w-[1200px] mx-auto px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.7 }}
+          className="mb-10"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">About Me</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            I'm a Mechatronics Engineering student at the University of Waterloo with a strong
-            foundation in engineering principles and hands-on project design. My passion lies in
-            software engineering, where I focus on creating automation systems, AI-driven
-            applications, and scalable web solutions that bring real-world impact.
+          <h2 className="mb-3" style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', color: '#111' }}>
+            Experiences
+          </h2>
+          <p style={{ color: '#888' }}>
+            Internships and team roles where I&apos;ve shipped products, trained models, and built systems.
           </p>
         </motion.div>
 
-        {/* My Journey Section */}
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h3 className="text-3xl font-semibold mb-6">My Journey</h3>
-            <div className="space-y-4 text-muted-foreground">
-              <p>
-                Through leadership roles and extracurricular activities, I’ve learned how to work
-                across teams and lead projects from concept to completion. My experience spans
-                full-stack development, AI/robotics, and mechanical design — giving me a unique
-                perspective at the intersection of hardware and software.
-              </p>
-              <p>
-                I’m motivated by the challenge of solving complex problems through thoughtful
-                design and clean, efficient code. My long-term goal is to grow as a software
-                engineer, working on impactful projects in automation, intelligent systems, and
-                innovative digital platforms.
-              </p>
-              <p>
-                Outside academics, I enjoy staying active through weight training and basketball,
-                diving into books that expand my perspective, and traveling with my family to
-                experience new cultures. These interests keep me balanced, creative, and constantly
-                inspired.
-              </p>
-            </div>
-          </motion.div>
-
-<motion.div
-  initial={{ opacity: 0, x: 30 }}
-  whileInView={{ opacity: 1, x: 0 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.8 }}
->
-  <PhotoCarousel
-    images={[
-      '/me/Normative.png',   // not 'public/me/Normative.PNG'
-      '/me/hackathon.jpg',   // not 'public/me/hackathon.JPG'
-      '/me/Basketball.png',
-      '/me/Grand_canyon.png'
-    ]}
-    className="rounded-2xl"
-    rounded="rounded-2xl"
-  />
-</motion.div>
-        </div>
-
-        {/* Skills Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Skills</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A blend of frontend, backend, hardware, and AI expertise developed through
-            projects, internships, and hands-on engineering work.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {skills.map((skill, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {experiences.map((exp, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: index * 0.15 }}
-              className="rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 p-6 text-center hover:scale-105"
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              onClick={() => setSelectedExp(exp)}
+              className="bg-white rounded-xl p-6 border cursor-pointer hover:shadow-lg transition-shadow group"
+              style={{ borderColor: '#e5e5e5', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
             >
-              <div className="flex justify-center mb-4">
-                <div className="p-3 bg-primary/10 rounded-full">
-                  <skill.icon className="w-8 h-8 text-primary" />
-                </div>
-              </div>
-              <h4 className="text-xl font-semibold mb-2">{skill.title}</h4>
-              <p className="text-muted-foreground text-sm">{skill.description}</p>
-            </motion.div>
-          ))}
-        </div>
-
-      </div>
-    </section>
-  )
-}
-
-
-
-
-// Experience Section
-const ExperienceSection = () => {
-  const experiences = [
-    {
-      title: "Machine Learning Research & Development Intern",
-      company: "Perceivable Design Studios Inc.",
-      location: "Remote",
-      duration: "Jan 2026 - Present",
-      type: "Internship",
-      description: "Leveraging extensive machine learning experience to research and develop multimodal translation frameworks that bridge ASL and speech, with a focus on real-time performance optimization and model deployment.",
-      achievements: [
-        "Researched and developed a multimodal translation framework in Python to bridge ASL and speech; engineered a streaming ASR pipeline by fine-tuning Whisper via Torchaudio, optimizing the model for low-resource environments through iterative hyperparameter tuning and NumPy-based signal processing",
-        "Engineered custom PyTorch Transformer architectures to model complex temporal dependencies in sign language, utilizing MediaPipe skeletal hand-tracking data to achieve 95% gesture recognition accuracy across diverse datasets via advanced data augmentation and OpenCV preprocessing",
-        "Optimized model inference and deployment cycles by evaluating the trade-offs between accuracy and latency; implemented ONNX quantization and WebSocket synchronization to reduce end-to-end lag by 40%, validating research benchmarks on edge hardware to ensure real-time performance"
-      ]
-    },
-    {
-      title: "Software Engineering Intern",
-      company: "Friedmann AI",
-      location: "Oakville, ON",
-      duration: "Sep 2025 - Present",
-      type: "Full-time",
-      description: "Currently developing and testing AI-powered chatbot for customer support along with other product features.",
-      achievements: [
-        "Implemented complete Calendly integration and booking system with pre-filled forms, improving demo scheduling efficiency for 30+ potential clients",
-        "Enhanced financial plan generator to meet FP Canada compliance requirements, developing a 1,200+ line prompt engineering system",
-        "Built comprehensive advisor profile management system with API endpoints and settings UI, streamlining information management for financial advisors",
-        "Created developer testing infrastructure including test signup endpoint and authentication bypass, reducing development workflow time by 75%",
-        "Resolved critical UI/UX issues including CSP configurations, Stripe client initialization, and preload optimizations"
-      ]
-    },
-        {
-      title: "Software Engineer Intern",
-      company: "Normative",
-      location: "Toronto, ON (Remote)",
-      duration: "Jan 2025 – Apr 2025",
-      type: "Internship",
-      description:
-        "Contributed to full-stack and AI development projects, enhancing internal tools and building AI-powered document processing systems.",
-      achievements: [
-        "Built and enhanced Freedman's internal site using Retool and JavaScript, improving usability for 30+ team members",
-        "Created an OCR-based document processing system with Python backend and HTML/CSS frontend, improving text recognition accuracy of scanned PDFs by 75%",
-        "Developed and tested AI-driven business proposal generation using reinforcement learning and Python, optimizing proposal quality and reducing editing time"
-      ]
-    },
-    {
-      title: "Autonomy Team Member",
-      company: "Waterloo Aerial Robotics Group (WARG)",
-      location: "Waterloo, ON",
-      duration: "May 2025 – Present",
-      type: "Extracurricular",
-      description:
-        "Working on the autonomy team to advance drone navigation and perception systems using Python and machine learning.",
-      achievements: [
-        "Developing computer vision pipelines with Python and ML models to increase drone navigation accuracy",
-        "Optimizing autonomy algorithms for object detection, landing precision, and flight stability",
-        "Collaborating with a multidisciplinary team to integrate autonomy modules into larger UAV systems"
-      ]
-    }
-  ]
-  
-
-  return (
-    <section id="experience" className="py-20 bg-background">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Professional Experience</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            My journey through various roles and teams, building impactful digital experiences
-          </p>
-        </motion.div>
-
-        <div className="space-y-8">
-          {experiences.map((experience, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
-              className="rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 p-6 hover:scale-[1.02]"
-            >
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold mb-1">{experience.title}</h3>
-                  <p className="text-lg text-primary font-medium mb-2">{experience.company}</p>
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      {experience.duration}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
-                      {experience.location}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-4 h-4 flex items-center justify-center">
-                        <div className={`w-2 h-2 rounded-full ${experience.type === 'Internship' ? 'bg-yellow-500' : 'bg-green-500'}`} />
-                      </div>
-                      {experience.type}
-                    </div>
-                  </div>
-                </div>
+              {/* Logo or colored initial block */}
+              <div
+                className="w-full h-40 rounded-lg mb-4 relative overflow-hidden flex items-center justify-center"
+                style={{ backgroundColor: exp.logoUrl ? '#f5f5f5' : exp.brandColor }}
+              >
+                {exp.logoUrl ? (
+                  <Image
+                    src={exp.logoUrl}
+                    alt={exp.company}
+                    fill
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
+                    sizes="300px"
+                  />
+                ) : (
+                  <span
+                    style={{
+                      fontFamily: 'Playfair Display, serif',
+                      fontSize: '80px',
+                      color: 'rgba(255,255,255,0.3)',
+                      fontWeight: '600',
+                      lineHeight: 1
+                    }}
+                  >
+                    {exp.company[0]}
+                  </span>
+                )}
               </div>
 
-              <p className="text-muted-foreground mb-4">{experience.description}</p>
+              {/* Metadata */}
+              <div className="text-xs mb-2" style={{ color: '#888', letterSpacing: '0.05em' }}>
+                {exp.type.toUpperCase()} · {exp.duration.toUpperCase()}
+              </div>
 
-              {experience.achievements && (
-                <div>
-                  <h4 className="font-medium mb-2">Key Achievements:</h4>
-                  <ul className="space-y-1">
-                    {experience.achievements.map((achievement, achievementIndex) => (
-                      <li key={achievementIndex} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                        {achievement}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {/* Company and role */}
+              <h3 className="mb-1 font-semibold text-sm leading-snug" style={{ color: '#111' }}>{exp.company}</h3>
+              <p className="text-sm" style={{ color: '#888' }}>{exp.title}</p>
             </motion.div>
           ))}
         </div>
       </div>
+
+      <ExperienceModal exp={selectedExp} onClose={() => setSelectedExp(null)} />
     </section>
   )
 }
 
-// Projects Section
+// ─── PROJECTS ──────────────────────────────────────────────────────
+
 const ProjectsSection = () => {
-  const projects = [
-    // Published projects (with deployed links) - at the top
-    {
-      title: "Proof - Real-Time Polymarket Intelligence Extension",
-      description:
-        "Chrome extension that adds real-time intelligence directly on Polymarket market pages. Won 2nd place in the Polymarket track at NexHacks 2026 @ CMU. Turns raw markets into informed decisions by surfacing correlation, context, and momentum where trades happen. Features related markets, trending markets, and real-world news integration.",
-      technologies: ["React", "TypeScript", "FastAPI", "Python", "Supabase", "Polymarket API", "GNews.io", "Chrome Extension", "Vercel", "Render"],
-      githubUrl: "https://github.com/sinhashivani/NexHacks",
-      projectUrl: null,
-      demoUrl: "/projectimages/NexHacks Video Demo.mp4",
-      featured: true,
-      icon: Trophy,
-      imageUrl: "/projectimages/proofp.png"
-    },
-    {
-      title: "Brain Battle - Interactive Quizzing and Study Platform",
-      description:
-        "Production-ready platform for competitive brain training with real-time multiplayer capabilities. Features WebSocket-based live gameplay, dynamic scoring algorithms, and diverse question categories. Built with scalable microservices architecture, persistent leaderboards, and responsive design for engaging user experience.",
-      technologies: ["React", "Next.js", "TypeScript", "Node.js", "WebSockets", "PostgreSQL", "Supabase", "OpenAI API", "Tailwind CSS", "Framer Motion", "Vercel"],
-      githubUrl: "https://github.com/shilojeyaraj/Brain-Battle",
-      projectUrl: "https://brain-battle.app",
-      featured: false,
-      icon: Trophy,
-      imageUrl: "/projectimages/Brain-Battle-logo.png"
-    },
-    {
-      title: "Dermalens - AI-Powered Skincare Analysis",
-      description:
-        "Production-ready platform leveraging Gemini API for medical-grade skin analysis, Elasticsearch for intelligent recommendations, and real-time data pipelines. Features multi-angle facial scanning, personalized routines, and scalable microservices architecture on Google Cloud Platform.",
-      technologies: ["Next.js", "TypeScript", "FastAPI", "Python", "Gemini API", "Elasticsearch", "Fivetran", "Supabase", "GCP", "BigQuery", "Vertex AI", "Tailwind CSS", "Radix UI", "Docker", "Vercel"],
-      githubUrl: "https://github.com/shilojeyaraj/Dermalens",
-      projectUrl: "https://dermalens.vercel.app",
-      featured: true,
-      icon: Search,
-      imageUrl: "/projectimages/dermalens-logo.png"
-    },
-    {
-      title: "Coursely - Waterloo Elective Advisor",
-      description:
-        "AI-powered platform helping engineering students choose electives through personalized recommendations. Built with Next.js, GPT-4o-mini, and RAG architecture featuring vector semantic search across 284+ courses. Includes natural language chat interface and intelligent course matching based on student profiles and career goals.",
-      technologies: ["React", "Next.js", "TypeScript", "OpenAI", "LangChain", "RAG", "PostgreSQL", "Supabase", "pgvector", "Python", "Tailwind CSS"],
-      githubUrl: "https://github.com/shilojeyaraj/Elective-chooser",
-      projectUrl: "https://uwaterloo-course-chats.vercel.app",
-      featured: true,
-      icon: GraduationCap,
-      imageUrl: "/projectimages/coursely-logo.jpg"
-    },
-    {
-      title: "Mid Chats - AI-Powered Chat Application",
-      description:
-        "Fully functioning personal chat application with real-time messaging capabilities. Features personal info storage for resume and cover letter building, along with comprehensive \"study mode\" function, intelligent conversation handling, message history, and seamless user experience. Built with modern full-stack technologies for scalable and responsive communication.",
-      technologies: ["Next.js", "TypeScript", "React", "Node.js", "FastAPI", "Python", "WebSockets", "PostgreSQL", "Supabase", "Tailwind CSS"],
-      githubUrl: "https://github.com/shilojeyaraj/Shilo-chat",
-      projectUrl: "https://shilo-chat.vercel.app",
-      featured: false,
-      icon: Sparkles,
-      imageUrl: "/projectimages/Gemini_Generated_Image_57sanv57sanv57sa.png"
-    },
-    {
-      title: "Global Solar Panel Energy Calculator",
-      description:
-        "Web app that estimates annual solar output using NASA irradiance data. Python backend with a lightweight HTML/CSS front end; calculates per-panel output by location and panel efficiency.",
-      technologies: ["Python", "Flask", "REST API", "JavaScript", "HTML/CSS"],
-      githubUrl: "https://github.com/shilojeyaraj/solar-energy-calculator",
-      projectUrl: "https://solar-energy-calculator.vercel.app",
-      featured: false,
-      icon: Sun,
-      imageUrl: "/projectimages/solar-ai.png"
-    },
-    // Other projects (without deployed links) - at the bottom
-    {
-      title: "Gym Posture Corrector (Real-Time Form Feedback)",
-      description:
-        "Real-time posture analysis using OpenCV/MediaPipe to extract skeletal keypoints and a TensorFlow classifier to distinguish good vs. bad exercise form. Flask + JS UI for instant feedback.",
-      technologies: ["Python", "OpenCV", "MediaPipe", "TensorFlow", "Flask", "HTML/CSS", "JavaScript"],
-      githubUrl: "https://github.com/shilojeyaraj/gym-motion-capture",
-      featured: false,
-      icon: Activity,
-      imageUrl: "/projectimages/gym-opencv-logo.jpg"
-    },
-    {
-      title: "OCR Image Scanner / Medical Document Analyzer",
-      description:
-        "OCR pipeline with Python + OpenAI APIs to extract structured info from scanned PDFs; front end in HTML/CSS for quick review and export.",
-      technologies: ["Python", "OpenAI API", "OCR", "Flask", "HTML/CSS"],
-      githubUrl: "https://github.com/shilojeyaraj/normativemxocr",
-      featured: false,
-      icon: FileText
-    },
-    {
-      title: "Nutrition/Fitness Plan Builder",
-      description:
-        "Generates tailored workout + meal plans based on user goals and restrictions. Gemini API prompts via Flask backend with a simple web UI.",
-      technologies: ["Python", "Flask", "Gemini API", "HTML/CSS", "JavaScript"],
-      githubUrl: "https://github.com/shilojeyaraj/Fitness-plan-maker",
-      featured: false,
-      icon: Utensils
-    },
-    {
-      title: "Tic Tac Toe Playing VEX Robot",
-      description:
-        "A VEX robot capable of playing Tic Tac Toe against human opponents. Used computer vision to recognize game board states and mechanical systems for piece placement. Demonstrated integration of robotics, computer vision, and game theory algorithms.",
-      technologies: ["C++", "VEX", "Robot C", "Computer Vision"],
-      githubUrl: "https://github.com/behzadwaseem/Tic-Tac-Tron",
-      featured: false,
-      icon: Gamepad2
-    }
-  ]
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   return (
-    <section id="projects" className="py-20">
-      <div className="container mx-auto px-4">
+    <section id="projects" className="py-20" style={{ backgroundColor: '#fafaf9' }}>
+      <div className="w-full max-w-[1200px] mx-auto px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.7 }}
+          className="mb-10"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Featured Projects</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Here are some of my recent projects that showcase my skills and passion for development.
+          <h2 className="mb-3" style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', color: '#111' }}>
+            Projects
+          </h2>
+          <p style={{ color: '#888' }}>
+            Explorations at the intersection of ML, product design, and full-stack.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => {
             const Icon = project.icon
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                className={`group relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 flex flex-col ${
-                  project.featured ? 'md:col-span-1' : ''
-                }`}
+                transition={{ duration: 0.5, delay: (index % 3) * 0.08 }}
+                onClick={() => setSelectedProject(project)}
+                className="bg-white rounded-xl overflow-hidden border cursor-pointer hover:shadow-lg transition-shadow group"
+                style={{ borderColor: '#e5e5e5', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
               >
-                {/* Project image/logo header */}
-                <div className={`relative h-48 md:h-56 flex items-center justify-center overflow-hidden group/image ${
-                  project.imageUrl 
-                    ? project.title.includes('Proof')
-                      ? 'bg-[#1e3a8a]'
-                      : project.title.includes('Brain Battle') 
-                        ? 'bg-[#0D1137]' 
-                        : project.title.includes('Dermalens')
-                          ? 'bg-gradient-to-br from-[#F0FFF4] via-[#D1FAE5] to-[#A7F3D0]'
-                          : project.title.includes('Solar')
-                            ? 'bg-gradient-to-br from-[#0D1B2A] via-[#2A52BE] to-[#8A2BE2]'
-                            : 'bg-white'
-                    : 'bg-primary/5'
-                }`}>
-
+                {/* Image */}
+                <div className="relative overflow-hidden h-48" style={{ background: project.headerBg }}>
                   {project.imageUrl ? (
-                    <div className={`relative w-full h-full flex items-center justify-center ${
-                      project.title.includes('Dermalens') ? 'p-0' : 'p-4'
-                    }`}>
-                      <Image
-                        src={project.imageUrl}
-                        alt={project.title}
-                        fill
-className={`${
-                           project.title.includes('Dermalens') ? 'object-contain scale-[3.25]' : 
-                            project.title.includes('Solar') ? 'object-cover scale-150' : 'object-contain'
-                          }`}
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    </div>
+                    <Image
+                      src={project.imageUrl}
+                      alt={project.title}
+                      fill
+                      className={`group-hover:scale-105 transition-transform duration-300 ${
+                        project.title === 'Dermalens' ? 'object-contain scale-[2.8] group-hover:scale-[3.0]' :
+                        project.title === 'Solar Panel Calculator' ? 'object-cover scale-125 group-hover:scale-[1.35]' :
+                        'object-contain'
+                      }`}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                   ) : (
-                    <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-                      <Icon className="w-8 h-8 text-primary" />
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Icon className="w-10 h-10" style={{ color: 'rgba(255,255,255,0.4)' }} />
                     </div>
                   )}
-
-                  {/* Hover overlay with View Live/Demo button */}
-                  {((project.title.includes('Brain Battle') || 
-                    project.title.includes('Dermalens') || 
-                    project.title.includes('Coursely') || 
-                    project.title.includes('Mid Chats')) && project.projectUrl) ||
-                    (project.title.includes('Proof') && (project.projectUrl || project.demoUrl)) ? (
-                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
-                      <a
-                        href={(project.demoUrl || project.projectUrl || '') as string}
-                        target={project.demoUrl ? undefined : "_blank"}
-                        rel={project.demoUrl ? undefined : "noopener noreferrer"}
-                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-10 px-6"
-                      >
-                        {project.demoUrl ? (
-                          <>
-                            <Play className="w-4 h-4 mr-2" />
-                            Watch Demo
-                          </>
-                        ) : (
-                          <>
-                            <ExternalLink className="w-4 h-4 mr-2" />
-                            View Live
-                          </>
-                        )}
-                      </a>
-                    </div>
-                  ) : null}
                 </div>
 
-                {/* Card body */}
-                <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-xl font-semibold mb-1.5">{project.title}</h3>
-                  <p className="text-muted-foreground mb-3 text-sm">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech, techIndex) => (
+                {/* Card body — title + first 3 tags only */}
+                <div className="p-6">
+                  <h3
+                    className="mb-4 font-semibold group-hover:text-[#C0634A] transition-colors leading-snug"
+                    style={{ color: '#111' }}
+                  >
+                    {project.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.slice(0, 3).map((tech) => (
                       <span
-                        key={techIndex}
-                        className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full font-medium"
+                        key={tech}
+                        className="px-3 py-1 rounded-full text-xs"
+                        style={{ backgroundColor: '#f5f5f5', color: '#555' }}
                       >
                         {tech}
                       </span>
                     ))}
-                  </div>
-
-                  {/* Action buttons at the bottom */}
-                  <div className="mt-auto flex flex-col sm:flex-row gap-2">
-                    {project.demoUrl && (
-                      <a
-                        href={project.demoUrl}
-                        className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-9 px-4"
+                    {project.technologies.length > 3 && (
+                      <span
+                        className="px-3 py-1 rounded-full text-xs"
+                        style={{ backgroundColor: '#f5f5f5', color: '#888' }}
                       >
-                        <Play className="w-4 h-4 mr-2" />
-                        Watch Demo
-                      </a>
-                    )}
-                    {project.projectUrl && (
-                      <a
-                        href={project.projectUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-9 px-4 ${
-                          project.demoUrl ? '' : ''
-                        }`}
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        View Live
-                      </a>
-                    )}
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 ${
-                          (project.projectUrl || project.demoUrl) ? 'flex-1' : 'w-full'
-                        }`}
-                      >
-                        <Github className="w-4 h-4 mr-2" />
-                        View on GitHub
-                      </a>
+                        +{project.technologies.length - 3}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -696,208 +834,319 @@ className={`${
           })}
         </div>
       </div>
+
+      <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>
   )
 }
 
-// Contact Section
-const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
+// ─── FOOTER ────────────────────────────────────────────────────────
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-    // Clear status when user starts typing
-    if (submitStatus.type) {
-      setSubmitStatus({ type: null, message: '' })
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus({ type: null, message: '' })
-
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        setSubmitStatus({ type: 'success', message: data.message || 'Message sent successfully!' })
-        setFormData({ name: '', email: '', message: '' })
-      } else {
-        setSubmitStatus({ type: 'error', message: data.error || 'Failed to send message. Please try again.' })
-      }
-    } catch (error) {
-      setSubmitStatus({ type: 'error', message: 'Failed to send message. Please try again.' })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
+const Footer = () => {
   return (
-    <section id="contact" className="py-20 bg-muted/50">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Get In Touch</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            I'm always open to discussing new opportunities and interesting projects. 
-            Let's connect and create something amazing together.
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h3 className="text-2xl font-semibold mb-6">Let's Connect</h3>
-            <p className="text-muted-foreground mb-8">
-              Whether you have a project in mind, want to collaborate, or just want to say hello, 
-              I'd love to hear from you.
-            </p>
-            
-            <div className="space-y-6">
-              {[
-                { icon: Mail, label: 'Email', value: 'stjeyara@uwaterloo.ca' },
-                { icon: MapPin, label: 'Location', value: 'Available for remote work and willing to relocate' },
-                { icon: Calendar, label: 'Availability', value: 'Open to new opportunities' }
-              ].map(({ icon: Icon, label, value }) => (
-                <div key={label} className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold">{label}</h4>
-                    <p className="text-muted-foreground">{value}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-all duration-300 p-6"
-          >
-            <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Your Name"
-                required
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Your Email"
-                required
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              />
-              <textarea
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Your Message"
-                rows={5}
-                required
-                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
-              />
-              {submitStatus.type && (
-                <div className={`p-3 rounded-md text-sm ${
-                  submitStatus.type === 'success' 
-                    ? 'bg-green-500/10 text-green-500 border border-green-500/20' 
-                    : 'bg-red-500/10 text-red-500 border border-red-500/20'
-                }`}>
-                  {submitStatus.message}
-                </div>
-              )}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white hover:from-primary/90 hover:via-purple-500/90 hover:to-pink-500/90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2"
-              >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
-            </form>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// Navigation
-const Navigation = () => {
-  return (
-    <motion.nav
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="fixed top-0 w-full z-50 glass backdrop-blur-md border-b border-white/10"
+    <footer
+      id="contact"
+      className="w-full max-w-[1200px] mx-auto px-8 py-16 mt-20 border-t"
+      style={{ borderColor: '#e5e5e5' }}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
-          <div className="font-bold text-xl text-gradient">ShiloJeyaraj.com</div>
-          
-          <div className="hidden md:flex space-x-8">
-            {['About', 'Experience', 'Projects', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-              >
-                {item}
-              </a>
-            ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+        <div>
+          <h3 className="mb-4" style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', color: '#111' }}>
+            Let&apos;s build something.
+          </h3>
+          <p style={{ color: '#888', lineHeight: 1.6 }}>
+            Open to new opportunities, collaborations, and interesting conversations.
+            Always happy to chat about AI, robotics, or your next big idea.
+          </p>
+        </div>
+
+        <div className="flex flex-col justify-center gap-5">
+          <a
+            href="mailto:stjeyara@uwaterloo.ca"
+            className="text-base hover:opacity-70 transition-opacity"
+            style={{ color: '#C0634A' }}
+          >
+            stjeyara [at] uwaterloo.ca
+          </a>
+          <div className="flex items-center gap-2 text-sm" style={{ color: '#888' }}>
+            <a
+              href="https://linkedin.com/in/shilo-jeyaraj"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#C0634A] transition-colors"
+            >
+              LinkedIn
+            </a>
+            <span>·</span>
+            <a
+              href="https://github.com/shilojeyaraj"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#C0634A] transition-colors"
+            >
+              GitHub
+            </a>
+            <span>·</span>
+            <a
+              href="mailto:stjeyara@uwaterloo.ca"
+              className="hover:text-[#C0634A] transition-colors"
+            >
+              Email
+            </a>
           </div>
         </div>
       </div>
-    </motion.nav>
+
+      <div className="mt-16 pt-8 border-t text-sm text-center" style={{ borderColor: '#e5e5e5', color: '#888' }}>
+        © 2026 Shilo Jeyaraj. Designed with intention.
+      </div>
+    </footer>
   )
 }
 
-export default function Home() {
+// ─── CHAT MODAL ────────────────────────────────────────────────────
+
+type ChatMessage = { role: 'user' | 'assistant'; content: string }
+
+const ChatModal = ({
+  isOpen,
+  onOpen,
+  onClose,
+}: {
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+}) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+  useEffect(() => {
+    if (isOpen) setTimeout(() => inputRef.current?.focus(), 100)
+  }, [isOpen])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
+
+  const sendMessage = async () => {
+    if (!input.trim() || isLoading) return
+    const userMsg: ChatMessage = { role: 'user', content: input.trim() }
+    const newMessages = [...messages, userMsg]
+    setMessages(newMessages)
+    setInput('')
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages }),
+      })
+
+      if (response.status === 429) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: "You've reached the 15-message limit for this hour. Feel free to reach out directly at stjeyara@uwaterloo.ca!",
+          },
+        ])
+        setIsLoading(false)
+        return
+      }
+
+      if (!response.ok) throw new Error('Chat failed')
+
+      const reader = response.body!.getReader()
+      const decoder = new TextDecoder()
+      let assistantContent = ''
+
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }])
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const chunk = decoder.decode(value)
+        for (const line of chunk.split('\n')) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6).trim()
+            if (data === '[DONE]') continue
+            try {
+              const parsed = JSON.parse(data)
+              if (parsed.text) {
+                assistantContent += parsed.text
+                setMessages((prev) => {
+                  const updated = [...prev]
+                  updated[updated.length - 1] = { role: 'assistant', content: assistantContent }
+                  return updated
+                })
+              }
+            } catch { /* skip malformed SSE */ }
+          }
+        }
+      }
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: "I'm having trouble connecting right now. Reach out directly at stjeyara@uwaterloo.ca.",
+        },
+      ])
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
-    <main className="min-h-screen">
-      <Navigation />
+    <>
+      {/* Floating trigger button */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ delay: 1 }}
+            onClick={onOpen}
+            className="fixed bottom-6 right-6 z-50 px-5 py-3 text-sm font-medium rounded-full shadow-lg text-white hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: '#C0634A' }}
+          >
+            Ask Shilo.ai ✦
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Chat modal */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/40 z-50"
+              onClick={onClose}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 40, scale: 0.97 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+              className="fixed bottom-6 right-6 z-50 w-[360px] md:w-[400px] h-[520px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Chat with Shilo.ai"
+            >
+              {/* Header */}
+              <div className="px-5 py-4 border-b flex items-center justify-between shrink-0" style={{ borderColor: '#e5e5e5' }}>
+                <div>
+                  <h3 className="font-semibold text-sm" style={{ color: '#111' }}>Ask Shilo.ai</h3>
+                  <p className="text-xs" style={{ color: '#888' }}>Ask anything about Shilo</p>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f5f5f5] transition-colors"
+                  style={{ color: '#888' }}
+                  aria-label="Close chat"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+                {messages.length === 0 && (
+                  <div className="text-center text-sm mt-10 px-4" style={{ color: '#888' }}>
+                    <p className="text-2xl mb-3">👋</p>
+                    <p className="font-medium mb-1" style={{ color: '#555' }}>Hi! I&apos;m Shilo&apos;s AI assistant.</p>
+                    <p>Ask me about his experience, projects, or how to reach him.</p>
+                  </div>
+                )}
+                {messages.map((msg, i) => (
+                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div
+                      className="max-w-[82%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed"
+                      style={{
+                        backgroundColor: msg.role === 'user' ? '#C0634A' : '#f5f5f5',
+                        color: msg.role === 'user' ? '#fff' : '#111',
+                        borderBottomRightRadius: msg.role === 'user' ? '4px' : undefined,
+                        borderBottomLeftRadius: msg.role === 'assistant' ? '4px' : undefined,
+                      }}
+                    >
+                      {msg.content || (isLoading && i === messages.length - 1 ? (
+                        <span className="inline-flex gap-1 items-center py-0.5">
+                          <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:0ms]" style={{ backgroundColor: '#999' }} />
+                          <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:150ms]" style={{ backgroundColor: '#999' }} />
+                          <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:300ms]" style={{ backgroundColor: '#999' }} />
+                        </span>
+                      ) : '')}
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Input */}
+              <div className="px-4 py-3 border-t flex gap-2 shrink-0" style={{ borderColor: '#e5e5e5' }}>
+                <input
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
+                  }}
+                  placeholder="Ask something…"
+                  className="flex-1 px-3 py-2.5 text-sm rounded-full outline-none focus:ring-2 focus:ring-[#C0634A]/30"
+                  style={{ backgroundColor: '#f5f5f5', color: '#111' }}
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={sendMessage}
+                  disabled={isLoading || !input.trim()}
+                  className="w-9 h-9 text-white rounded-full flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40"
+                  style={{ backgroundColor: '#C0634A' }}
+                  aria-label="Send message"
+                >
+                  <Send size={15} />
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+
+// ─── HOME ──────────────────────────────────────────────────────────
+
+export default function Home() {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+  return (
+    <main className="min-h-screen" style={{ backgroundColor: '#fafaf9' }}>
+      <Navigation onOpenChat={() => setIsChatOpen(true)} />
       <HeroSection />
-      <AboutSection />
       <ExperienceSection />
       <ProjectsSection />
-      <ContactSection />
+      <Footer />
+      <ChatModal
+        isOpen={isChatOpen}
+        onOpen={() => setIsChatOpen(true)}
+        onClose={() => setIsChatOpen(false)}
+      />
     </main>
   )
-} 
+}

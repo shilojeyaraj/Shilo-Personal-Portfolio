@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -50,6 +49,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        terracotta: "#C0634A",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -57,51 +57,30 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
         mono: ["var(--font-mono)", "monospace"],
       },
       keyframes: {
         "fade-up": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(30px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
+          "0%": { opacity: "0", transform: "translateY(30px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "fade-in": {
-          "0%": {
-            opacity: "0",
-          },
-          "100%": {
-            opacity: "1",
-          },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         "slide-in": {
-          "0%": {
-            transform: "translateX(-100%)",
-          },
-          "100%": {
-            transform: "translateX(0)",
-          },
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(0)" },
         },
         "shimmer": {
-          "0%": {
-            backgroundPosition: "-200% 0",
-          },
-          "100%": {
-            backgroundPosition: "200% 0",
-          },
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
         },
         "float": {
-          "0%, 100%": {
-            transform: "translateY(0px)",
-          },
-          "50%": {
-            transform: "translateY(-20px)",
-          },
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
         },
       },
       animation: {
@@ -111,11 +90,7 @@ module.exports = {
         "shimmer": "shimmer 2s linear infinite",
         "float": "float 6s ease-in-out infinite",
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
     },
   },
   plugins: [],
-} 
+}
