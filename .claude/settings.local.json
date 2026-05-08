@@ -5,7 +5,11 @@
       "Bash(curl -s http://localhost:3000)",
       "Bash(curl -s \"http://localhost:3001\")",
       "Bash(npx tsc *)",
-      "Bash(Copy-Item *)"
+      "Bash(Copy-Item *)",
+      "Bash(vercel --version)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
