@@ -4,7 +4,8 @@
       "Bash(npm run *)",
       "Bash(curl -s http://localhost:3000)",
       "Bash(curl -s \"http://localhost:3001\")",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(Copy-Item *)"
     ]
   }
 }

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Github, Linkedin, Mail, Play, ExternalLink, Send, X, Menu,
+  Github, Linkedin, Mail, MapPin, Calendar, Play, ExternalLink, Send, X, Menu,
   Trophy, GraduationCap, Activity, FileText, Utensils, Gamepad2, Sun, Sparkles, Search
 } from 'lucide-react'
 
@@ -12,12 +12,31 @@ import {
 
 const experiences = [
   {
+    title: "Machine Learning Engineering Intern",
+    company: "Coincidence Labs",
+    location: "San Francisco, CA",
+    duration: "Apr 2026 – Present",
+    type: "Internship",
+    brandColor: "#1A1A1A",
+    logoBackdropColor: "#FFFFFF",
+    logoScale: 1.25,
+    logoUrl: "/me/coincidencewhitelogo.png" as string | null,
+    description: "Building and deploying production ML systems — from fine-tuning open-source models to shipping agentic automation features at scale.",
+    achievements: [
+      "Fine-tuned LLaMA 3 and Mistral 7B using LoRA/QLoRA on domain-specific datasets, reducing hallucination rate by 34% over baseline",
+      "Processed and cleaned 2M+ token training datasets using Hugging Face Datasets and pandas, cutting preprocessing time by 55%",
+      "Containerized ML inference services with Docker and deployed on AWS EC2, reducing cold start time by 3x",
+      "Shipped an agentic task automation feature using LangGraph and tool-calling, reducing manual user steps by 60%"
+    ]
+  },
+  {
     title: "Machine Learning Research Engineer",
     company: "Cohere Labs",
     location: "Toronto, ON",
     duration: "Jan 2026 – Present",
     type: "Internship",
-    brandColor: "#6B4A42",
+    brandColor: "#39594A",
+    logoBackdropColor: "#FFFFFF",
     logoUrl: "/me/cohere logo.png" as string | null,
     description: "Independently architecting ML research frameworks focused on continuous model adaptation, hallucination reduction, and memory-efficient inference for large language models.",
     achievements: [
@@ -33,6 +52,9 @@ const experiences = [
     duration: "Jan 2026 – Present",
     type: "Internship",
     brandColor: "#6B8E9F",
+    logoBackdropColor: "#000000",
+    logoObjectFit: "cover" as const,
+    logoScale: 1.08,
     logoUrl: "/me/Perciabalelogo.png" as string | null,
     description: "Researched and developed multimodal translation frameworks bridging ASL and speech with real-time performance optimization.",
     achievements: [
@@ -47,8 +69,9 @@ const experiences = [
     location: "Oakville, ON",
     duration: "Sep 2025 – Present",
     type: "Full-time",
-    brandColor: "#2C3E50",
-    logoUrl: "/me/friedmannlogo.png" as string | null,
+    brandColor: "#A98FD4",
+    logoBackdropColor: "#FFFFFF",
+    logoUrl: "/me/friedmannblacklogo.png" as string | null,
     description: "Developing AI-powered chatbot features and financial planning tools for advisor clients.",
     achievements: [
       "Implemented complete Calendly integration improving demo scheduling efficiency for 30+ clients",
@@ -63,8 +86,10 @@ const experiences = [
     location: "Toronto, ON (Remote)",
     duration: "Jan 2025 – Apr 2025",
     type: "Internship",
-    brandColor: "#5A7C5F",
-    logoUrl: "/me/orbitive.jpg" as string | null,
+    brandColor: "#5B6BE8",
+    logoScale: 1.35,
+    logoScaleY: 1.7,
+    logoUrl: "/me/Normativebigger.png" as string | null,
     description: "Contributed to full-stack and AI development, enhancing internal tools and building AI-powered document processing.",
     achievements: [
       "Built and enhanced internal site using Retool and JavaScript, improving usability for 30+ team members",
@@ -79,7 +104,8 @@ const experiences = [
     duration: "May 2025 – Present",
     type: "Extracurricular",
     brandColor: "#6B5B4F",
-    logoUrl: "/me/Uwaterloo_logo.png" as string | null,
+    logoBackdropColor: "#FFFFFF",
+    logoUrl: "/me/warglogo.jpg" as string | null,
     description: "Working on autonomy systems for drone navigation and perception using Python and ML.",
     achievements: [
       "Developing computer vision pipelines to increase drone navigation accuracy",
@@ -89,10 +115,13 @@ const experiences = [
   }
 ]
 
+const FILTER_CATEGORIES = ['All', 'Machine Learning', 'Full-Stack', 'Hackathon', 'Computer Vision'] as const
+
 const projects = [
   {
     title: "Proof",
     category: "Chrome Extension",
+    filters: ["Hackathon", "Full-Stack"],
     description: "Chrome extension adding real-time intelligence on Polymarket pages. Won 2nd place in the Polymarket track at NexHacks 2026 @ CMU.",
     technologies: ["React", "TypeScript", "FastAPI", "Supabase", "Polymarket API", "Chrome Extension"],
     githubUrl: "https://github.com/sinhashivani/NexHacks",
@@ -105,6 +134,7 @@ const projects = [
   {
     title: "Dermalens",
     category: "AI Platform",
+    filters: ["Machine Learning", "Full-Stack"],
     description: "Production-ready AI skincare analysis platform with Gemini API, multi-angle facial scanning, and GCP data pipelines.",
     technologies: ["Next.js", "FastAPI", "Gemini API", "Elasticsearch", "GCP", "BigQuery", "Docker"],
     githubUrl: "https://github.com/shilojeyaraj/Dermalens",
@@ -117,18 +147,20 @@ const projects = [
   {
     title: "Coursely",
     category: "AI Advisor",
+    filters: ["Machine Learning", "Full-Stack"],
     description: "AI Waterloo elective advisor with RAG architecture, GPT-4o-mini, and vector semantic search across 284+ courses.",
     technologies: ["Next.js", "OpenAI", "LangChain", "pgvector", "PostgreSQL", "TypeScript"],
     githubUrl: "https://github.com/shilojeyaraj/Elective-chooser",
     projectUrl: "https://uwaterloo-course-chats.vercel.app" as string | null,
     demoUrl: null as string | null,
     imageUrl: "/projectimages/coursely-logo.jpg",
-    headerBg: "#F8F8F8",
+    headerBg: "#FFFFFF",
     icon: GraduationCap
   },
   {
     title: "Brain Battle",
     category: "Multiplayer Platform",
+    filters: ["Full-Stack"],
     description: "Competitive brain training platform with real-time WebSocket multiplayer, dynamic scoring, and persistent leaderboards.",
     technologies: ["React", "Next.js", "Node.js", "WebSockets", "PostgreSQL", "OpenAI"],
     githubUrl: "https://github.com/shilojeyaraj/Brain-Battle",
@@ -141,18 +173,20 @@ const projects = [
   {
     title: "Mid Chats",
     category: "AI Chat App",
+    filters: ["Machine Learning", "Full-Stack"],
     description: "AI chat application with real-time messaging, study mode, and resume/cover letter building features.",
     technologies: ["Next.js", "FastAPI", "WebSockets", "PostgreSQL", "Supabase", "TypeScript"],
     githubUrl: "https://github.com/shilojeyaraj/Shilo-chat",
     projectUrl: "https://shilo-chat.vercel.app" as string | null,
     demoUrl: null as string | null,
     imageUrl: "/projectimages/Gemini_Generated_Image_57sanv57sanv57sa.png",
-    headerBg: "#1a1a2e",
+    headerBg: "#FFFFFF",
     icon: Sparkles
   },
   {
     title: "Solar Panel Calculator",
     category: "Web Tool",
+    filters: ["Full-Stack"],
     description: "Web app estimating annual solar output using NASA irradiance data, with per-panel calculation by location and efficiency.",
     technologies: ["Python", "Flask", "REST API", "JavaScript", "HTML/CSS"],
     githubUrl: "https://github.com/shilojeyaraj/solar-energy-calculator",
@@ -165,18 +199,20 @@ const projects = [
   {
     title: "Gym Posture Corrector",
     category: "Computer Vision",
+    filters: ["Machine Learning", "Computer Vision"],
     description: "Real-time posture analysis using OpenCV/MediaPipe skeletal keypoints and TensorFlow classifier for instant form feedback.",
     technologies: ["Python", "OpenCV", "MediaPipe", "TensorFlow", "Flask"],
     githubUrl: "https://github.com/shilojeyaraj/gym-motion-capture",
     projectUrl: null as string | null,
     demoUrl: null as string | null,
     imageUrl: "/projectimages/gym-opencv-logo.jpg",
-    headerBg: "#1a1a1a",
+    headerBg: "#FFFFFF",
     icon: Activity
   },
   {
     title: "OCR Document Analyzer",
     category: "ML Pipeline",
+    filters: ["Machine Learning", "Computer Vision"],
     description: "OCR pipeline with Python + OpenAI APIs extracting structured info from scanned PDFs with clean review and export UI.",
     technologies: ["Python", "OpenAI API", "OCR", "Flask", "HTML/CSS"],
     githubUrl: "https://github.com/shilojeyaraj/normativemxocr",
@@ -189,6 +225,7 @@ const projects = [
   {
     title: "Nutrition/Fitness Plan Builder",
     category: "AI Tool",
+    filters: ["Machine Learning"],
     description: "Generates tailored workout and meal plans based on user goals and dietary restrictions using Gemini API via Flask.",
     technologies: ["Python", "Flask", "Gemini API", "HTML/CSS", "JavaScript"],
     githubUrl: "https://github.com/shilojeyaraj/Fitness-plan-maker",
@@ -197,24 +234,54 @@ const projects = [
     imageUrl: null,
     headerBg: "#2d4a3e",
     icon: Utensils
-  },
-  {
-    title: "Tic Tac Toe VEX Robot",
-    category: "Robotics",
-    description: "VEX robot playing Tic Tac Toe using computer vision for board state recognition and mechanical piece placement.",
-    technologies: ["C++", "VEX", "Robot C", "Computer Vision"],
-    githubUrl: "https://github.com/behzadwaseem/Tic-Tac-Tron",
-    projectUrl: null as string | null,
-    demoUrl: null as string | null,
-    imageUrl: null,
-    headerBg: "#3d2b1f",
-    icon: Gamepad2
   }
 ]
 
 // ─── EXPERIENCE MODAL ──────────────────────────────────────────────
 
-type Experience = typeof experiences[0]
+type Experience = (typeof experiences)[number]
+
+function ExperienceLogoImage({ exp, sizes }: { exp: Experience; sizes: string }) {
+  if (!exp.logoUrl) return null
+  const fit = exp.logoObjectFit ?? 'contain'
+  const scaleX = exp.logoScale ?? 1
+  const scaleY = exp.logoScaleY ?? exp.logoScale ?? 1
+  const transform = scaleX !== 1 || scaleY !== 1 ? `scale(${scaleX}, ${scaleY})` : undefined
+
+  if (fit === 'cover') {
+    return (
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={transform ? { transform } : undefined}
+        >
+          <Image
+            src={exp.logoUrl}
+            alt={exp.company}
+            fill
+            className="object-cover object-center"
+            sizes={sizes}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className="absolute inset-4"
+      style={transform ? { transform } : undefined}
+    >
+      <Image
+        src={exp.logoUrl}
+        alt={exp.company}
+        fill
+        className="object-contain object-center"
+        sizes={sizes}
+      />
+    </div>
+  )
+}
 
 const ExperienceModal = ({ exp, onClose }: { exp: Experience | null; onClose: () => void }) => {
   useEffect(() => {
@@ -251,16 +318,10 @@ const ExperienceModal = ({ exp, onClose }: { exp: Experience | null; onClose: ()
               {/* Logo / brand block */}
               <div
                 className="h-36 relative overflow-hidden flex items-end shrink-0"
-                style={{ background: exp.logoUrl ? '#f5f5f5' : exp.brandColor }}
+                style={{ background: exp.logoUrl ? (exp.logoBackdropColor ?? exp.brandColor) : exp.brandColor }}
               >
                 {exp.logoUrl ? (
-                  <Image
-                    src={exp.logoUrl}
-                    alt={exp.company}
-                    fill
-                    className="object-cover object-center"
-                    sizes="512px"
-                  />
+                  <ExperienceLogoImage exp={exp} sizes="512px" />
                 ) : (
                   <span
                     className="px-6 pb-3 leading-none select-none"
@@ -370,7 +431,8 @@ const ProjectModal = ({ project, onClose }: { project: Project | null; onClose: 
                     fill
                     className={
                       project.title === 'Dermalens' ? 'object-contain scale-[2.8]' :
-                      project.title === 'Solar Panel Calculator' ? 'object-cover scale-125' :
+                      project.title === 'Solar Panel Calculator' ? 'object-cover scale-150' :
+                      project.title === 'Proof' ? 'object-contain scale-[1.4]' :
                       'object-contain'
                     }
                     sizes="672px"
@@ -464,7 +526,7 @@ const Navigation = ({ onOpenChat }: { onOpenChat: () => void }) => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const navLinks = ['About', 'Experience', 'Projects', 'Contact']
+  const navLinks = ['About', 'Experience', 'Projects', 'Research', 'Contact']
 
   return (
     <nav
@@ -579,7 +641,7 @@ const HeroSection = () => {
             className="mb-6"
             style={{
               fontFamily: 'Playfair Display, serif',
-              fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+              fontSize: 'clamp(2.4rem, 4vw, 4rem)',
               color: '#111',
               lineHeight: 1.1
             }}
@@ -685,7 +747,7 @@ const ExperienceSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {experiences.map((exp, index) => (
             <motion.div
               key={index}
@@ -700,16 +762,10 @@ const ExperienceSection = () => {
               {/* Logo or colored initial block */}
               <div
                 className="w-full h-40 rounded-lg mb-4 relative overflow-hidden flex items-center justify-center"
-                style={{ backgroundColor: exp.logoUrl ? '#f5f5f5' : exp.brandColor }}
+                style={{ backgroundColor: exp.logoUrl ? (exp.logoBackdropColor ?? exp.brandColor) : exp.brandColor }}
               >
                 {exp.logoUrl ? (
-                  <Image
-                    src={exp.logoUrl}
-                    alt={exp.company}
-                    fill
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                    sizes="300px"
-                  />
+                  <ExperienceLogoImage exp={exp} sizes="300px" />
                 ) : (
                   <span
                     style={{
@@ -747,6 +803,11 @@ const ExperienceSection = () => {
 
 const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [activeFilter, setActiveFilter] = useState<string>('All')
+
+  const filteredProjects = activeFilter === 'All'
+    ? projects
+    : projects.filter(p => p.filters.includes(activeFilter))
 
   return (
     <section id="projects" className="py-20" style={{ backgroundColor: '#fafaf9' }}>
@@ -756,7 +817,7 @@ const ProjectsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="mb-10"
+          className="mb-8"
         >
           <h2 className="mb-3" style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', color: '#111' }}>
             Projects
@@ -766,73 +827,107 @@ const ProjectsSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => {
-            const Icon = project.icon
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: (index % 3) * 0.08 }}
-                onClick={() => setSelectedProject(project)}
-                className="bg-white rounded-xl overflow-hidden border cursor-pointer hover:shadow-lg transition-shadow group"
-                style={{ borderColor: '#e5e5e5', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
-              >
-                {/* Image */}
-                <div className="relative overflow-hidden h-48" style={{ background: project.headerBg }}>
-                  {project.imageUrl ? (
-                    <Image
-                      src={project.imageUrl}
-                      alt={project.title}
-                      fill
-                      className={`group-hover:scale-105 transition-transform duration-300 ${
-                        project.title === 'Dermalens' ? 'object-contain scale-[2.8] group-hover:scale-[3.0]' :
-                        project.title === 'Solar Panel Calculator' ? 'object-cover scale-125 group-hover:scale-[1.35]' :
-                        'object-contain'
-                      }`}
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Icon className="w-10 h-10" style={{ color: 'rgba(255,255,255,0.4)' }} />
-                    </div>
-                  )}
-                </div>
+        {/* Filter pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-wrap gap-2 mb-8"
+        >
+          {FILTER_CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveFilter(cat)}
+              className="px-4 py-1.5 rounded-full text-sm transition-all duration-200 hover:opacity-90"
+              style={{
+                backgroundColor: activeFilter === cat ? '#C0634A' : '#f0efed',
+                color: activeFilter === cat ? '#fff' : '#555',
+                fontWeight: activeFilter === cat ? 500 : 400,
+              }}
+            >
+              {cat}
+            </button>
+          ))}
+        </motion.div>
 
-                {/* Card body — title + first 3 tags only */}
-                <div className="p-6">
-                  <h3
-                    className="mb-4 font-semibold group-hover:text-[#C0634A] transition-colors leading-snug"
-                    style={{ color: '#111' }}
-                  >
-                    {project.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.slice(0, 3).map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 rounded-full text-xs"
-                        style={{ backgroundColor: '#f5f5f5', color: '#555' }}
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {project.technologies.length > 3 && (
-                      <span
-                        className="px-3 py-1 rounded-full text-xs"
-                        style={{ backgroundColor: '#f5f5f5', color: '#888' }}
-                      >
-                        +{project.technologies.length - 3}
-                      </span>
+        {/* Projects grid — re-keyed on filter change to trigger stagger */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeFilter}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filteredProjects.map((project, index) => {
+              const Icon = project.icon
+              return (
+                <motion.div
+                  key={project.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.06 }}
+                  onClick={() => setSelectedProject(project)}
+                  className="bg-white rounded-xl overflow-hidden border cursor-pointer hover:shadow-lg transition-shadow group"
+                  style={{ borderColor: '#e5e5e5', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
+                >
+                  {/* Image */}
+                  <div className="relative overflow-hidden h-48" style={{ background: project.headerBg }}>
+                    {project.imageUrl ? (
+                      <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        fill
+                        className={`group-hover:scale-105 transition-transform duration-300 ${
+                          project.title === 'Dermalens' ? 'object-contain scale-[2.8] group-hover:scale-[3.0]' :
+                          project.title === 'Solar Panel Calculator' ? 'object-cover scale-150 group-hover:scale-[1.6]' :
+                          project.title === 'Proof' ? 'object-contain scale-[1.4] group-hover:scale-[1.5]' :
+                          'object-contain'
+                        }`}
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Icon className="w-10 h-10" style={{ color: 'rgba(255,255,255,0.4)' }} />
+                      </div>
                     )}
                   </div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
+
+                  {/* Card body — title + first 3 tags */}
+                  <div className="p-6">
+                    <h3
+                      className="mb-4 font-semibold group-hover:text-[#C0634A] transition-colors leading-snug"
+                      style={{ color: '#111' }}
+                    >
+                      {project.title}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.slice(0, 3).map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 rounded-full text-xs"
+                          style={{ backgroundColor: '#f5f5f5', color: '#555' }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies.length > 3 && (
+                        <span
+                          className="px-3 py-1 rounded-full text-xs"
+                          style={{ backgroundColor: '#f5f5f5', color: '#888' }}
+                        >
+                          +{project.technologies.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
@@ -840,65 +935,346 @@ const ProjectsSection = () => {
   )
 }
 
-// ─── FOOTER ────────────────────────────────────────────────────────
+// ─── RESEARCH ──────────────────────────────────────────────────────
+
+const researchPapers = [
+  {
+    title: "Memory Retrieval Strategy Matters: A Comparative Study of Episodic Memory Backends for Reflexion-Style LLM Agents",
+    category: "Machine Learning",
+    status: "In Review",
+    date: "May 2026",
+    excerpt: "We show that retrieval ordering within a backend class accounts for a larger performance gap (12pp) than the choice of backend itself. Vector DB leads on first-attempt success; SQL converges once failure-first ordering is applied.",
+    link: "/research/reflexion" as string | null,
+    headerBg: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)"
+  }
+]
+
+const ResearchSection = () => {
+  return (
+    <section id="research" className="py-20">
+      <div className="w-full max-w-[1200px] mx-auto px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mb-10"
+        >
+          <h2 className="mb-3" style={{ fontFamily: 'Playfair Display, serif', fontSize: '48px', color: '#111' }}>
+            Research
+          </h2>
+          <p style={{ color: '#888' }}>
+            Exploring the frontiers of machine learning, LLM adaptation, and intelligent systems.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {researchPapers.map((paper, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="bg-white rounded-xl overflow-hidden border hover:shadow-lg transition-shadow group"
+              style={{ borderColor: '#e5e5e5', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
+            >
+              {/* Header image area */}
+              <div className="relative overflow-hidden h-48" style={{ background: paper.headerBg }}>
+                <div className="absolute inset-0 flex items-center justify-center px-6">
+                  <p
+                    className="text-center text-sm font-medium leading-relaxed"
+                    style={{ color: 'rgba(255,255,255,0.5)', fontFamily: 'Playfair Display, serif' }}
+                  >
+                    {paper.title === 'Paper title coming soon' ? '— Coming Soon —' : paper.title}
+                  </p>
+                </div>
+                {/* Category badge */}
+                <div
+                  className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.85)' }}
+                >
+                  {paper.category}
+                </div>
+                {/* Status badge */}
+                <div
+                  className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium"
+                  style={{ backgroundColor: '#C0634A', color: '#fff' }}
+                >
+                  {paper.status}
+                </div>
+              </div>
+
+              {/* Card body */}
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-xs mb-3" style={{ color: '#888' }}>
+                  <span>{paper.date}</span>
+                </div>
+
+                <h3
+                  className="mb-3 font-semibold leading-snug group-hover:text-[#C0634A] transition-colors"
+                  style={{ color: '#111' }}
+                >
+                  {paper.title}
+                </h3>
+
+                <p className="text-sm" style={{ color: '#888', lineHeight: '1.6' }}>
+                  {paper.excerpt}
+                </p>
+
+                {paper.link && (
+                  <a
+                    href={paper.link}
+                    className="mt-4 inline-flex items-center gap-1 text-sm hover:opacity-70 transition-opacity"
+                    style={{ color: '#C0634A' }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Read paper →
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── FOOTER / CONTACT ───────────────────────────────────────────────
 
 const Footer = () => {
+  const [formName, setFormName] = useState('')
+  const [formEmail, setFormEmail] = useState('')
+  const [formMessage, setFormMessage] = useState('')
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const subject = encodeURIComponent(`Portfolio: message from ${formName || 'visitor'}`)
+    const body = encodeURIComponent(
+      `Name: ${formName}\nReply-to: ${formEmail}\n\n${formMessage}`
+    )
+    window.location.href = `mailto:stjeyara@uwaterloo.ca?subject=${subject}&body=${body}`
+  }
+
+  const contactRows = [
+    {
+      icon: Mail,
+      label: 'Email',
+      detail: 'stjeyara@uwaterloo.ca',
+      href: 'mailto:stjeyara@uwaterloo.ca',
+    },
+    {
+      icon: MapPin,
+      label: 'Location',
+      detail: 'Waterloo, ON · Available for remote work',
+      href: null as string | null,
+    },
+    {
+      icon: Calendar,
+      label: 'Availability',
+      detail: 'Open to internships and new opportunities',
+      href: null as string | null,
+    },
+  ] as const
+
   return (
     <footer
       id="contact"
-      className="w-full max-w-[1200px] mx-auto px-8 py-16 mt-20 border-t"
+      className="w-full mt-20 border-t"
       style={{ borderColor: '#e5e5e5' }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-        <div>
-          <h3 className="mb-4" style={{ fontFamily: 'Playfair Display, serif', fontSize: '36px', color: '#111' }}>
-            Let&apos;s build something.
-          </h3>
-          <p style={{ color: '#888', lineHeight: 1.6 }}>
-            Open to new opportunities, collaborations, and interesting conversations.
-            Always happy to chat about AI, robotics, or your next big idea.
-          </p>
-        </div>
+      <div className="w-full max-w-[1200px] mx-auto px-8 py-16 md:py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start"
+        >
+          {/* Left: Let's Connect */}
+          <div>
+            <h2
+              className="mb-4"
+              style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: 'clamp(2rem, 4vw, 48px)',
+                color: '#111',
+                lineHeight: 1.15,
+              }}
+            >
+              Let&apos;s Connect
+            </h2>
+            <p className="text-base mb-10 max-w-md" style={{ color: '#888', lineHeight: 1.6 }}>
+              Whether you have a project in mind, want to collaborate, or just want to say hello,
+              I&apos;d love to hear from you.
+            </p>
 
-        <div className="flex flex-col justify-center gap-5">
-          <a
-            href="mailto:stjeyara@uwaterloo.ca"
-            className="text-base hover:opacity-70 transition-opacity"
-            style={{ color: '#C0634A' }}
-          >
-            stjeyara [at] uwaterloo.ca
-          </a>
-          <div className="flex items-center gap-2 text-sm" style={{ color: '#888' }}>
-            <a
-              href="https://linkedin.com/in/shilo-jeyaraj"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#C0634A] transition-colors"
-            >
-              LinkedIn
-            </a>
-            <span>·</span>
-            <a
-              href="https://github.com/shilojeyaraj"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#C0634A] transition-colors"
-            >
-              GitHub
-            </a>
-            <span>·</span>
-            <a
-              href="mailto:stjeyara@uwaterloo.ca"
-              className="hover:text-[#C0634A] transition-colors"
-            >
-              Email
-            </a>
+            <ul className="flex flex-col gap-7">
+              {contactRows.map((row) => {
+                const Icon = row.icon
+                const inner = (
+                  <>
+                    <div
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border"
+                      style={{
+                        borderColor: '#e5e5e5',
+                        backgroundColor: '#ffffff',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                      }}
+                    >
+                      <Icon size={20} style={{ color: '#C0634A' }} aria-hidden />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold mb-0.5" style={{ color: '#111' }}>
+                        {row.label}
+                      </p>
+                      {row.href ? (
+                        <a
+                          href={row.href}
+                          className="text-sm hover:text-[#C0634A] transition-colors break-all"
+                          style={{ color: '#888' }}
+                        >
+                          {row.detail}
+                        </a>
+                      ) : (
+                        <p className="text-sm" style={{ color: '#888' }}>
+                          {row.detail}
+                        </p>
+                      )}
+                    </div>
+                  </>
+                )
+                return (
+                  <li key={row.label} className="flex items-start gap-4">
+                    {inner}
+                  </li>
+                )
+              })}
+            </ul>
+
+            <div className="flex flex-wrap items-center gap-2 mt-10 text-sm" style={{ color: '#888' }}>
+              <a
+                href="https://linkedin.com/in/shilo-jeyaraj"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#C0634A] transition-colors"
+              >
+                LinkedIn
+              </a>
+              <span className="select-none">·</span>
+              <a
+                href="https://github.com/shilojeyaraj"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#C0634A] transition-colors"
+              >
+                GitHub
+              </a>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="mt-16 pt-8 border-t text-sm text-center" style={{ borderColor: '#e5e5e5', color: '#888' }}>
-        © 2026 Shilo Jeyaraj. Designed with intention.
+          {/* Right: Send a Message */}
+          <div
+            className="rounded-xl border p-8 md:p-10"
+            style={{
+              borderColor: '#e5e5e5',
+              backgroundColor: '#ffffff',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            }}
+          >
+            <h3
+              className="mb-8"
+              style={{
+                fontFamily: 'Playfair Display, serif',
+                fontSize: '28px',
+                color: '#111',
+                lineHeight: 1.2,
+              }}
+            >
+              Send a Message
+            </h3>
+
+            <form onSubmit={handleContactSubmit} className="flex flex-col gap-5">
+              <div>
+                <label htmlFor="contact-name" className="sr-only">
+                  Your Name
+                </label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  required
+                  autoComplete="name"
+                  placeholder="Your Name"
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
+                  className="w-full rounded-lg border px-4 py-3 text-base outline-none transition-colors focus:border-[#C0634A] placeholder:text-[#888]"
+                  style={{
+                    borderColor: '#e5e5e5',
+                    backgroundColor: '#fafaf9',
+                    color: '#111',
+                  }}
+                />
+              </div>
+              <div>
+                <label htmlFor="contact-email" className="sr-only">
+                  Your Email
+                </label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder="Your Email"
+                  value={formEmail}
+                  onChange={(e) => setFormEmail(e.target.value)}
+                  className="w-full rounded-lg border px-4 py-3 text-base outline-none transition-colors focus:border-[#C0634A] placeholder:text-[#888]"
+                  style={{
+                    borderColor: '#e5e5e5',
+                    backgroundColor: '#fafaf9',
+                    color: '#111',
+                  }}
+                />
+              </div>
+              <div>
+                <label htmlFor="contact-message" className="sr-only">
+                  Your Message
+                </label>
+                <textarea
+                  id="contact-message"
+                  required
+                  rows={5}
+                  placeholder="Your Message"
+                  value={formMessage}
+                  onChange={(e) => setFormMessage(e.target.value)}
+                  className="w-full resize-y rounded-lg border px-4 py-3 text-base outline-none transition-colors focus:border-[#C0634A] min-h-[140px] placeholder:text-[#888]"
+                  style={{
+                    borderColor: '#e5e5e5',
+                    backgroundColor: '#fafaf9',
+                    color: '#111',
+                  }}
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full rounded-full py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={{
+                  backgroundColor: '#C0634A',
+                  fontFamily: 'Inter, sans-serif',
+                }}
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+        </motion.div>
+
+        <div
+          className="mt-16 pt-8 border-t text-sm text-center"
+          style={{ borderColor: '#e5e5e5', color: '#888' }}
+        >
+          © 2026 Shilo Jeyaraj. Designed with intention.
+        </div>
       </div>
     </footer>
   )
@@ -907,6 +1283,78 @@ const Footer = () => {
 // ─── CHAT MODAL ────────────────────────────────────────────────────
 
 type ChatMessage = { role: 'user' | 'assistant'; content: string }
+
+function renderInlineMarkdown(text: string): React.ReactNode {
+  const parts: React.ReactNode[] = []
+  const re = /\*\*([^*]+)\*\*|\*([^*]+)\*/g
+  let lastIdx = 0
+  let key = 0
+  let m: RegExpExecArray | null
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > lastIdx) parts.push(text.slice(lastIdx, m.index))
+    if (m[1] !== undefined) parts.push(<strong key={key++}>{m[1]}</strong>)
+    else parts.push(<em key={key++}>{m[2]}</em>)
+    lastIdx = m.index + m[0].length
+  }
+  if (lastIdx < text.length) parts.push(text.slice(lastIdx))
+  return parts.length === 0 ? text : parts
+}
+
+function MarkdownText({ text }: { text: string }) {
+  const lines = text.split('\n')
+  type Block = { type: 'p' | 'ol' | 'ul'; items: string[] }
+  const blocks: Block[] = []
+  let current: Block | null = null
+
+  const push = () => { if (current) { blocks.push(current); current = null } }
+
+  for (const raw of lines) {
+    const line = raw.trim()
+    if (!line) { push(); continue }
+    const ol = line.match(/^\d+\.\s+(.*)$/)
+    const ul = line.match(/^[-*]\s+(.*)$/)
+    if (ol) {
+      if (!current || current.type !== 'ol') { push(); current = { type: 'ol', items: [] } }
+      current.items.push(ol[1])
+    } else if (ul) {
+      if (!current || current.type !== 'ul') { push(); current = { type: 'ul', items: [] } }
+      current.items.push(ul[1])
+    } else {
+      if (!current || current.type !== 'p') { push(); current = { type: 'p', items: [] } }
+      current.items.push(line)
+    }
+  }
+  push()
+
+  return (
+    <>
+      {blocks.map((b, bi) => {
+        const spacing = bi > 0 ? 'mt-2' : ''
+        if (b.type === 'p') {
+          return (
+            <p key={bi} className={spacing}>
+              {b.items.map((line, li) => (
+                <React.Fragment key={li}>
+                  {li > 0 && <br />}
+                  {renderInlineMarkdown(line)}
+                </React.Fragment>
+              ))}
+            </p>
+          )
+        }
+        const ListTag = b.type === 'ol' ? 'ol' : 'ul'
+        const listClass = b.type === 'ol' ? 'list-decimal' : 'list-disc'
+        return (
+          <ListTag key={bi} className={`${listClass} pl-5 space-y-1 ${spacing}`}>
+            {b.items.map((item, ii) => (
+              <li key={ii}>{renderInlineMarkdown(item)}</li>
+            ))}
+          </ListTag>
+        )
+      })}
+    </>
+  )
+}
 
 const ChatModal = ({
   isOpen,
@@ -1085,13 +1533,15 @@ const ChatModal = ({
                         borderBottomLeftRadius: msg.role === 'assistant' ? '4px' : undefined,
                       }}
                     >
-                      {msg.content || (isLoading && i === messages.length - 1 ? (
-                        <span className="inline-flex gap-1 items-center py-0.5">
-                          <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:0ms]" style={{ backgroundColor: '#999' }} />
-                          <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:150ms]" style={{ backgroundColor: '#999' }} />
-                          <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:300ms]" style={{ backgroundColor: '#999' }} />
-                        </span>
-                      ) : '')}
+                      {msg.content
+                        ? (msg.role === 'assistant' ? <MarkdownText text={msg.content} /> : msg.content)
+                        : (isLoading && i === messages.length - 1 ? (
+                            <span className="inline-flex gap-1 items-center py-0.5">
+                              <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:0ms]" style={{ backgroundColor: '#999' }} />
+                              <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:150ms]" style={{ backgroundColor: '#999' }} />
+                              <span className="w-1.5 h-1.5 rounded-full animate-bounce [animation-delay:300ms]" style={{ backgroundColor: '#999' }} />
+                            </span>
+                          ) : '')}
                     </div>
                   </div>
                 ))}
@@ -1141,6 +1591,7 @@ export default function Home() {
       <HeroSection />
       <ExperienceSection />
       <ProjectsSection />
+      <ResearchSection />
       <Footer />
       <ChatModal
         isOpen={isChatOpen}
