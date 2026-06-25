@@ -189,12 +189,12 @@ export default function DrivingPaper() {
           </Subsection>
           <Subsection title="World Models for Driving">
             <P>
-              DreamerV3 learns a recurrent world model (RSSM) by jointly optimising a reconstruction decoder, a reward predictor, and a discount predictor, then derives a policy by imagining rollouts in latent space. DayDreamer applies this to real robot learning. MILE and UniAD learn latent representations jointly with driving objectives. Our failure case — a world model that compresses away the precise signal the policy needs — is a known risk with RSSM-based representations when the observation space is already low-dimensional and the model is under-trained.
+              DreamerV3 learns a recurrent world model (RSSM) by jointly optimising a reconstruction decoder, a reward predictor, and a discount predictor, then derives a policy by imagining rollouts in latent space. Our failure case — a world model that compresses away the precise signal the policy needs — is a known risk with RSSM-based representations when the observation space is already low-dimensional and the model is under-trained.
             </P>
           </Subsection>
           <Subsection title="Distribution Shift in Behavioral Cloning">
             <P>
-              Ross & Bagnell prove that BC error compounds quadratically with horizon length. DAgger corrects this by on-policy data collection; DART injects noise to force the policy into off-distribution states during collection, providing recovery labels without requiring online expert querying. We combine both approaches and compare their effectiveness at modest compute.
+              DAgger corrects distribution shift by on-policy data collection; DART injects noise to force the policy into off-distribution states during collection, providing recovery labels without requiring online expert querying. We combine both approaches and compare their effectiveness at modest compute.
             </P>
           </Subsection>
           <Subsection title="MetaDrive">
@@ -538,16 +538,11 @@ export default function DrivingPaper() {
               'Li, Q., Peng, Z., Feng, L., Zhang, Q., Xue, Z., & Zhou, B. (2022). MetaDrive: Composing Diverse Driving Scenarios for Generalizable Reinforcement Learning. IEEE TPAMI.',
               'Hafner, D., Lillicrap, T., Norouzi, M., & Ba, J. (2023). Mastering Diverse Domains through World Models. arXiv:2301.04104.',
               'Hafner, D., et al. (2019). Learning Latent Dynamics for Planning from Pixels. ICML.',
-              'Wu, P., et al. (2023). DayDreamer: World Models for Physical Robot Learning. CoRL.',
               'Pomerleau, D. A. (1989). ALVINN: An Autonomous Land Vehicle in a Neural Network. NeurIPS.',
               'Ross, S., Gordon, G., & Bagnell, D. (2011). A Reduction of Imitation Learning to No-Regret Online Learning. AISTATS.',
-              'Ross, S. & Bagnell, D. (2010). Efficient Reductions for Imitation Learning. AISTATS.',
               'Laskey, M., et al. (2017). DART: Noise Injection for Robust Imitation Learning. CoRL.',
               'Treiber, M., Hennecke, A., & Helbing, D. (2000). Congested Traffic States in Empirical Observations and Microscopic Simulations. Physical Review E, 62(2).',
               'Bansal, M., Krizhevsky, A., & Ogale, A. (2019). ChauffeurNet: Learning to Drive by Imitating the Best and Synthesizing the Worst. RSS.',
-              'Codevilla, F., et al. (2018). End-to-End Driving via Conditional Imitation Learning. ICRA.',
-              'Hu, A., et al. (2022). Model-Based Imitation Learning for Urban Driving. NeurIPS.',
-              'Hu, Y., et al. (2023). Planning-Oriented Autonomous Driving. CVPR.',
             ].map((ref, i) => (
               <p key={i} className="text-xs" style={{ color: '#666', lineHeight: 1.7, paddingLeft: '1.5rem', textIndent: '-1.5rem' }}>
                 [{i + 1}] {ref}
