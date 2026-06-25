@@ -946,6 +946,15 @@ const researchPapers = [
     excerpt: "We show that retrieval ordering within a backend class accounts for a larger performance gap (12pp) than the choice of backend itself. Vector DB leads on first-attempt success; SQL converges once failure-first ordering is applied.",
     link: "/research/reflexion" as string | null,
     headerBg: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)"
+  },
+  {
+    title: "Direct Imitation Learning for Autonomous Driving: When the World-Model Latent Loses the Lane",
+    category: "Robotics · ML",
+    status: "Preprint",
+    date: "June 2026",
+    excerpt: "A DreamerV3-style world model loses the lane signal in its latent on structured vector observations. Direct BC reaches 96% on straights; DART augmentation raises roundabout completion from 42% to 64% without regressing other geometries.",
+    link: "/research/driving" as string | null,
+    headerBg: "linear-gradient(135deg, #0a1628 0%, #1a3a5c 50%, #0d3b2e 100%)"
   }
 ]
 
