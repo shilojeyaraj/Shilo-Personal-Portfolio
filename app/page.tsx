@@ -12,6 +12,39 @@ import {
 
 const experiences = [
   {
+    title: "Machine Learning Engineer",
+    company: "Akido Labs",
+    location: "Los Angeles, CA",
+    duration: "Jun 2026 – Aug 2026",
+    type: "Internship",
+    brandColor: "#3A5A8C",
+    logoBackdropColor: "#FFFFFF",
+    logoUrl: "/me/akidolabslogo.png" as string | null,
+    description: "Built and owned the evaluation infrastructure for a clinical AI pre-visit patient-intake system, designing LLM-as-judge frameworks to score conversational quality, detect hallucinations, and gate visit readiness.",
+    achievements: [
+      "Architected ScopeAI, an LLM-as-judge evaluation framework scoring clinical intake conversations across a multi-stage pipeline (LLM-judged relevancy, briefing, investigation-gap, and problem-extraction stages plus deterministic engagement and readiness stages), enforcing a readiness gate of >=80% coverage and zero avoidable gaps per visit",
+      "Engineered a pluggable JudgeBackend interface supporting Mock, Bedrock, and Anthropic backends, enabling per-question relevancy scoring (1-4 Self-CoT) and derivation-aware grounding/hallucination detection reusable across model providers",
+      "Built the end-to-end evaluation data pipeline, aggregating per-question scores into per-visit metrics and exporting to MongoDB, wired directly into the Atlas EncounterProcessing cluster for production intake encounters"
+    ]
+  },
+  {
+    title: "Architecture Lead, AI Voice Systems",
+    company: "Grant Fund Pro (Fundy AI)",
+    location: "Toronto, ON",
+    duration: "Jun 2026 – Jul 2026",
+    type: "Contract / Experiential (Riipen)",
+    brandColor: "#4A90D9",
+    logoBackdropColor: "#FFFFFF",
+    logoUrl: "/me/grantfundprologo.jpg" as string | null,
+    description: "Architected a production AI voice agent that autonomously qualifies Canadian business owners for non-dilutive funding programs, owning the real-time conversational layer and cross-session memory system end to end.",
+    achievements: [
+      "Architected a production voice agent on a composable stack (ElevenLabs Conversational AI, Twilio, n8n, Claude Haiku 4.5, Supabase) that runs structured multi-turn qualifying conversations over live telephony, designing the system prompt, dynamic-variable schema, and turn-taking configuration for sub-200ms TTS response",
+      "Engineered a real-time conversation-initiation webhook (n8n + Supabase) that injects returning-caller context within the telephony dial window, enforcing a strict all-variables response contract that eliminated call-drop failures and enabled persistent cross-session lead memory",
+      "Designed a transcript-windowing and structured extraction pipeline (recent turns verbatim plus rolling summarization under a 9,000-character budget) feeding a Claude-based grant-matching stage, bounding token cost on long calls without losing conversational context",
+      "Split the model workload across a cheaper real-time LLM for live turns and Claude Haiku for post-call structured matching, and authored a full developer runbook plus a managed-to-custom stack migration path (ElevenLabs to LiveKit + Telnyx + Deepgram) enabling the team to extend the system"
+    ]
+  },
+  {
     title: "Machine Learning Engineering Intern",
     company: "Coincidence Labs",
     location: "San Francisco, CA",
@@ -50,7 +83,7 @@ const experiences = [
     company: "Perceivable Design Studios Inc.",
     location: "Remote",
     duration: "Jan 2026 – Present",
-    type: "Internship",
+    type: "Contract",
     brandColor: "#6B8E9F",
     logoBackdropColor: "#000000",
     logoObjectFit: "cover" as const,
